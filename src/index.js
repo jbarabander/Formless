@@ -1,15 +1,21 @@
 function FieldList(obj, options) {
-  this.fields = obj;
+  this.fields = obj || {};
   this._validatorStore = {};
 }
-FieldList.prototype.validateModel = function (model) {
+
+FieldList.prototype.setDefaultFields = function(fields) {
+  this.fields = fields;
+}
+
+
+FieldList.prototype.validateModel = function (model, fields) {
   var keys = Object.keys(model);
   var validationResult = {};
   var self = this;
   for (var i = 0; i < keys.length; i++) {
     var validatorsAndParams;
     var currentKey = keys[i];
-    var currentField = self.fields[currentKey];
+    var currentField = fields ? fields[currentKey] : self.fields[currentKey];
     if (currentField === undefined) {
       validationResult[currentKey] = true;
       break;
