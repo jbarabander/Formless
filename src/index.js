@@ -62,8 +62,6 @@ FieldList.prototype.register = function (validator, validatorFunc) {
     this._validatorStore[validator.name] = validator;
   }
   else if (arguments.length === 2 && typeof validator === 'string') {
-  	console.log(validator);
-  	console.log(validatorFunc);
     var newValidator = new Validator(validator, validatorFunc);
     this._validatorStore[newValidator.name] = newValidator;
   }
