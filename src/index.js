@@ -39,6 +39,12 @@ function testAllValidators(value, validatorParamArr) {
   })
 }
 
+function testAllValidatorsMap(value, validatorParamArr) {
+  validatorParamArr.map(function(element) {
+    return element.validator.validateProp(value, element.param);
+  })
+}
+
 FieldList.prototype._parseValidatorObj = function (validationObj) {
   var newParam;
   var newValidator;
@@ -102,4 +108,11 @@ function Validator(name, validationFunc) {
 
 Validator.prototype.validateProp = function (prop, value) {
   return this.validationFunc(prop, value);
+}
+
+Validator.prototype.validatePropToObj = function(prop, value) {
+  return {
+    name: this.name,
+    validated: this.validationFunc(prop, value)
+  };
 }
