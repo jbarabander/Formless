@@ -92,10 +92,6 @@ FieldList.prototype._parseValidator = function (validator) {
   return {validator: newValidator, param: newParam};
 }
 
-
-
-
-
 FieldList.prototype.register = function (validator, validatorFunc) {
   if (validator instanceof Validator) {
     this._validatorStore[validator.name] = validator;
@@ -122,7 +118,6 @@ Validator.prototype.setErrorMessage = function (errorMessage) {
     this.errorMessage = errorMessage;
   }
 }
-
 
 Validator.prototype.validateProp = function (prop, value) {
   return this.validationFunc(prop, value);
