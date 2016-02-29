@@ -40,9 +40,15 @@ function testAllValidators(value, validatorParamArr) {
 }
 
 function testAllValidatorsMap(value, validatorParamArr) {
-  validatorParamArr.map(function(element) {
-    return element.validator.validateProp(value, element.param);
+  var obj = {invalid: [], valid:[]};
+  validatorParamArr.forEach(function(element) {
+    if(!element.validator.validateProp(value, element.param)) {
+      obj.invalid.push(element.validator.validatePropToObj(value, element.param));
+    } else {
+      obj.valid.push(element.validator.validatePropToObj(value, element.param));
+    }
   })
+  return obj;
 }
 
 FieldList.prototype._parseValidatorObj = function (validationObj) {
@@ -97,14 +103,26 @@ FieldList.prototype.register = function (validator, validatorFunc) {
   else if (arguments.length === 2 && typeof validator === 'string') {
     var newValidator = new Validator(validator, validatorFunc);
     this._validatorStore[newValidator.name] = newValidator;
+  } 
+  else if (typeof validator === 'function' && validator.name !== undefined) {
+    var newValidator = new Validator(validator.name, validator);
+    this._validatorStore[validator.name] = newValidator;
   }
 }
+
 
 function Validator(name, validationFunc) {
   // this.model = model;
   this.validationFunc = validationFunc;
   this.name = name;
 }
+
+Validator.prototype.setErrorMessage = function (errorMessage) {
+  if(errorMessage) {
+    this.errorMessage = errorMessage;
+  }
+}
+
 
 Validator.prototype.validateProp = function (prop, value) {
   return this.validationFunc(prop, value);
@@ -113,6 +131,6 @@ Validator.prototype.validateProp = function (prop, value) {
 Validator.prototype.validatePropToObj = function(prop, value) {
   return {
     name: this.name,
-    validated: this.validationFunc(prop, value)
+    valid: this.validationFunc(prop, value),
   };
 }
