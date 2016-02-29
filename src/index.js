@@ -22,12 +22,13 @@ FieldList.prototype.validateModel = function (model, fields) {
     }
     if (Array.isArray(currentField)) {
       validatorsAndParams = currentField.map(function (element) {
-        return self._parseValidator(element);
+        return self._parseValidatorObj(element);
       })
-      validationResult[currentKey] = testAllValidators(model[currentKey], validatorsAndParams);
+      validationResult[currentKey] = testAllValidatorsMap(model[currentKey], validatorsAndParams);
     } else {
-      validatorsAndParams = self._parseValidator(currentField);
-      validationResult[currentKey] = validatorsAndParams.validator.validateProp(model[currentKey], validatorsAndParams.param);
+      validatorsAndParams = self._parseValidatorObj(currentField);
+      console.log(validatorsAndParams);
+      validationResult[currentKey] = validatorsAndParams.validator.validatePropToObj(model[currentKey], validatorsAndParams.param);
     }
   }
   return validationResult;
@@ -54,15 +55,13 @@ function testAllValidatorsMap(value, validatorParamArr) {
 FieldList.prototype._parseValidatorObj = function (validationObj) {
   var newParam;
   var newValidator;
-  switch(typeof validationObj.validator) {
-    case 'string':
-      newValidator = this._validatorStore[validationObj.validator];
-      break;
-    case 'function':
-      newValidator = validationObj.validator;
-      break;
-    default:
-      throw new Error('Valiator must be a string or function');
+
+  if(validationObj.validator instanceof Validator || typeof validationObj.validator === 'function') {
+    newValidator = validationObj.validator;
+  } else if(typeof validationObj.validator === 'string') {
+    newValidator = this._validatorStore[validationObj.validator];
+  } else {
+    throw new Error('validator must either be instance of Validator, or must be string or function');
   }
   newParam = validationObj.param ? validationObj.param : null;
   return {validator: newValidator, param: newParam};
@@ -105,6 +104,7 @@ FieldList.prototype.register = function (validator, validatorFunc) {
   }
 
   if(newValidator) {
+    console.log(newValidator);
     this._validatorStore[newValidator.name] = newValidator;
   }
 }
