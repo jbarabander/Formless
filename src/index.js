@@ -93,16 +93,19 @@ FieldList.prototype._parseValidator = function (validator) {
 }
 
 FieldList.prototype.register = function (validator, validatorFunc) {
+  var newValidator;
   if (validator instanceof Validator) {
-    this._validatorStore[validator.name] = validator;
+    newValidator = validator;
   }
   else if (arguments.length === 2 && typeof validator === 'string') {
-    var newValidator = new Validator(validator, validatorFunc);
-    this._validatorStore[newValidator.name] = newValidator;
+    newValidator = new Validator(validator, validatorFunc);
   } 
   else if (typeof validator === 'function' && validator.name !== undefined) {
-    var newValidator = new Validator(validator.name, validator);
-    this._validatorStore[validator.name] = newValidator;
+    newValidator = new Validator(validator.name, validator);
+  }
+
+  if(newValidator) {
+    this._validatorStore[newValidator.name] = newValidator;
   }
 }
 
