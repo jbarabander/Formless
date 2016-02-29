@@ -34,11 +34,11 @@ FieldList.prototype.validateModel = function (model, fields) {
   return validationResult;
 }
 
-function testAllValidators(value, validatorParamArr) {
-  validatorParamArr.all(function (element) {
-    return element.validator.validateProp(value, element.param);
-  })
-}
+// function testAllValidators(value, validatorParamArr) {
+//   validatorParamArr.all(function (element) {
+//     return element.validator.validateProp(value, element.param);
+//   })
+// }
 
 function testAllValidatorsMap(value, validatorParamArr) {
   var obj = {invalid: [], valid:[]};
@@ -67,29 +67,29 @@ FieldList.prototype._parseValidatorObj = function (validationObj) {
   return {validator: newValidator, param: newParam};
 }
 
-FieldList.prototype._parseValidator = function (validator) {
-  var newParam;
-  var newValidator;
-  if (typeof validator === 'string') {
-    if (/\w+\s*\w*=\s*\w+/.test(validator)) {
-      var splitValidatorAndParam = validator.split('=');
-      newParam = splitValidatorAndParam[1];
-      newValidator = this._validatorStore[splitValidatorAndParam[0]];
-    } else {
-      newValidator = this._validatorStore[validator];
-      newParam = null;
-    }
-  // } else if (typeof validator === 'object' && (typeof validator.validator === 'object' || 'function' || 'string')) {
-  //     var validatorsAndParams = this._parseValidator(validator);
-  } else if (typeof validator === 'function') {
-      newValidator = validator;
-      newParam = null;
-  } else {
-      throw new Error('validator fields must be strings, arrays, or functions');
-  }
+// FieldList.prototype._parseValidator = function (validator) {
+//   var newParam;
+//   var newValidator;
+//   if (typeof validator === 'string') {
+//     if (/\w+\s*\w*=\s*\w+/.test(validator)) {
+//       var splitValidatorAndParam = validator.split('=');
+//       newParam = splitValidatorAndParam[1];
+//       newValidator = this._validatorStore[splitValidatorAndParam[0]];
+//     } else {
+//       newValidator = this._validatorStore[validator];
+//       newParam = null;
+//     }
+//   // } else if (typeof validator === 'object' && (typeof validator.validator === 'object' || 'function' || 'string')) {
+//   //     var validatorsAndParams = this._parseValidator(validator);
+//   } else if (typeof validator === 'function') {
+//       newValidator = validator;
+//       newParam = null;
+//   } else {
+//       throw new Error('validator fields must be strings, arrays, or functions');
+//   }
 
-  return {validator: newValidator, param: newParam};
-}
+//   return {validator: newValidator, param: newParam};
+// }
 
 FieldList.prototype.register = function (validator, validatorFunc) {
   var newValidator;
@@ -111,7 +111,6 @@ FieldList.prototype.register = function (validator, validatorFunc) {
 
 
 function Validator(name, validationFunc) {
-  // this.model = model;
   this.validationFunc = validationFunc;
   this.name = name;
 }
