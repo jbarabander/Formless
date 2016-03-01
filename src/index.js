@@ -27,7 +27,6 @@ FieldList.prototype.validateModel = function (model, fields) {
       validationResult[currentKey] = testAllValidatorsMap(model[currentKey], validatorsAndParams);
     } else {
       validatorsAndParams = self._parseValidatorObj(currentField);
-      console.log(validatorsAndParams);
       validationResult[currentKey] = validatorsAndParams.validator.validatePropToObj(model[currentKey], validatorsAndParams.param);
     }
   }
@@ -91,28 +90,40 @@ FieldList.prototype._parseValidatorObj = function (validationObj) {
 //   return {validator: newValidator, param: newParam};
 // }
 
-FieldList.prototype.register = function (validator, validatorFunc) {
+FieldList.prototype.register = function (validator, validatorFunc, message) {
   var newValidator;
   if (validator instanceof Validator) {
     newValidator = validator;
   }
-  else if (arguments.length === 2 && typeof validator === 'string') {
+  // else if (arguments.length === 2 typeof validator === 'string') {
+  else if (typeof validator === 'string') {
     newValidator = new Validator(validator, validatorFunc);
+    if(message) {
+      newValidator.setErrorMessage(message);
+    }
+    // if(arguments.length === 2)
+    // newValidator = new Validator(validator, validatorFunc);
   } 
   else if (typeof validator === 'function' && validator.name !== undefined) {
     newValidator = new Validator(validator.name, validator);
+    if(arguments.length === 2 && typeof validatorFunc === 'string') {
+     newValidator.setErrorMessage(message); 
+    }
   }
 
   if(newValidator) {
-    console.log(newValidator);
     this._validatorStore[newValidator.name] = newValidator;
   }
 }
 
 
-function Validator(name, validationFunc) {
+function Validator(name, validationFunc, message) {
   this.validationFunc = validationFunc;
   this.name = name;
+  if(message) {
+    this.errorMessage = message;
+  }
+
 }
 
 Validator.prototype.setErrorMessage = function (errorMessage) {
@@ -126,8 +137,8 @@ Validator.prototype.validateProp = function (prop, value) {
 }
 
 Validator.prototype.validatePropToObj = function(prop, value) {
-  return {
-    name: this.name,
-    valid: this.validationFunc(prop, value),
-  };
+  var validated = this.validationFunc(prop, value);
+  var obj = {name: this.name, passed: validated};
+  if(!validated && this.errorMessage) obj.message = this.errorMessage;
+  return obj;
 }
