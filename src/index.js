@@ -40,10 +40,11 @@ FieldList.prototype.validateModel = function (model, fields) {
 // }
 
 function testAllValidatorsMap(value, validatorParamArr) {
-  var obj = {invalid: [], valid:[]};
+  var obj = {invalid: [], valid:[], passed: true};
   validatorParamArr.forEach(function(element) {
     if(!element.validator.validateProp(value, element.param)) {
       obj.invalid.push(element.validator.validatePropToObj(value, element.param));
+      if(obj.passed) obj.passed = false;
     } else {
       obj.valid.push(element.validator.validatePropToObj(value, element.param));
     }
@@ -115,6 +116,10 @@ FieldList.prototype.register = function (validator, message, validatorFunc) {
   if(newValidator) {
     this._validatorStore[newValidator.name] = newValidator;
   }
+}
+
+FieldList.prototype.getValidator = function(name) {
+  return this._validatorStore[name];
 }
 
 
