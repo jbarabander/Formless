@@ -117,13 +117,14 @@ FieldList.prototype.register = function (validator, validatorFunc, message) {
 }
 
 
-function Validator(name, validationFunc, message) {
-  this.validationFunc = validationFunc;
+function Validator(name, message, validationFunc) {
   this.name = name;
-  if(message) {
+  if(typeof message === 'function') {
+    this.validationFunc = message;
+  } else if(typeof message === 'string') {
     this.errorMessage = message;
+    this.validationFunc = validationFunc;
   }
-
 }
 
 Validator.prototype.setErrorMessage = function (errorMessage) {
