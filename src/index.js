@@ -90,26 +90,27 @@ FieldList.prototype._parseValidatorObj = function (validationObj) {
 //   return {validator: newValidator, param: newParam};
 // }
 
-FieldList.prototype.register = function (validator, validatorFunc, message) {
+FieldList.prototype.register = function (validator, message, validatorFunc) {
   var newValidator;
   if (validator instanceof Validator) {
     newValidator = validator;
   }
   // else if (arguments.length === 2 typeof validator === 'string') {
   else if (typeof validator === 'string') {
-    newValidator = new Validator(validator, validatorFunc);
-    if(message) {
-      newValidator.setErrorMessage(message);
+    if(typeof message === 'function') {
+      newValidator = new Validator(validator, message);
+    } else if(typeof message === 'string') {
+      newValidator = new Validator(validator, message, validatorFunc);
     }
     // if(arguments.length === 2)
     // newValidator = new Validator(validator, validatorFunc);
   } 
-  else if (typeof validator === 'function' && validator.name !== undefined) {
-    newValidator = new Validator(validator.name, validator);
-    if(arguments.length === 2 && typeof validatorFunc === 'string') {
-     newValidator.setErrorMessage(message); 
-    }
-  }
+  // else if (typeof validator === 'function' && validator.name !== undefined) {
+  //   newValidator = new Validator(validator.name, validator);
+  //   if(arguments.length === 2 && typeof message === 'string') {
+  //    newValidator.setErrorMessage(message); 
+  //   }
+  // }
 
   if(newValidator) {
     this._validatorStore[newValidator.name] = newValidator;
