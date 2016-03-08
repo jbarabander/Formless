@@ -1,5 +1,5 @@
 var Validator = require('./Validator');
-var testAllValidatorsMap = require('./utilities').testAllValidatorsMap;
+var testAllValidators = require('./utilities').testAllValidators;
 
 function FieldList(obj, options) {
   this.fields = obj || {};
@@ -20,14 +20,14 @@ FieldList.prototype.validateModel = function (model, fields) {
     var currentKey = keys[i];
     var currentField = fields ? fields[currentKey] : self.fields[currentKey];
     if (currentField === undefined) {
-      validationResult[currentKey] = true;
-      break;
+      validationResult[currentKey] = {passed: true};
+      continue;
     }
     if (Array.isArray(currentField)) {
       validatorsAndParams = currentField.map(function (element) {
         return self._parseValidatorObj(element);
       })
-      validationResult[currentKey] = testAllValidatorsMap(model[currentKey], validatorsAndParams);
+      validationResult[currentKey] = testAllValidators(model[currentKey], validatorsAndParams);
     } else {
       validatorsAndParams = self._parseValidatorObj(currentField);
       validationResult[currentKey] = validatorsAndParams.validator.validatePropToObj(model[currentKey], validatorsAndParams.param);
@@ -50,30 +50,6 @@ FieldList.prototype._parseValidatorObj = function (validationObj) {
   newParam = validationObj.param ? validationObj.param : null;
   return {validator: newValidator, param: newParam};
 }
-
-// FieldList.prototype._parseValidator = function (validator) {
-//   var newParam;
-//   var newValidator;
-//   if (typeof validator === 'string') {
-//     if (/\w+\s*\w*=\s*\w+/.test(validator)) {
-//       var splitValidatorAndParam = validator.split('=');
-//       newParam = splitValidatorAndParam[1];
-//       newValidator = this._validatorStore[splitValidatorAndParam[0]];
-//     } else {
-//       newValidator = this._validatorStore[validator];
-//       newParam = null;
-//     }
-//   // } else if (typeof validator === 'object' && (typeof validator.validator === 'object' || 'function' || 'string')) {
-//   //     var validatorsAndParams = this._parseValidator(validator);
-//   } else if (typeof validator === 'function') {
-//       newValidator = validator;
-//       newParam = null;
-//   } else {
-//       throw new Error('validator fields must be strings, arrays, or functions');
-//   }
-
-//   return {validator: newValidator, param: newParam};
-// }
 
 FieldList.prototype.register = function (validator, message, validatorFunc) {
   var newValidator;

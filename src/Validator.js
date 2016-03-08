@@ -3,14 +3,14 @@ function Validator(name, message, validationFunc) {
   if(typeof message === 'function') {
     this.validationFunc = message;
   } else if(typeof message === 'string') {
-    this.errorMessage = message;
+    this.invalidMessage = message;
     this.validationFunc = validationFunc;
   }
 }
 
-Validator.prototype.setErrorMessage = function (errorMessage) {
-  if(errorMessage) {
-    this.errorMessage = errorMessage;
+Validator.prototype.setInvalidMessage = function (invalidMessage) {
+  if(invalidMessage) {
+    this.invalidMessage = invalidMessage;
   }
 }
 
@@ -21,7 +21,7 @@ Validator.prototype.validateProp = function (prop, value) {
 Validator.prototype.validatePropToObj = function(prop, value) {
   var validated = this.validationFunc(prop, value);
   var obj = {name: this.name, passed: validated};
-  if(!validated && this.errorMessage) obj.message = this.errorMessage;
+  if(!validated && this.invalidMessage) obj.message = this.invalidMessage;
   return obj;
 }
 

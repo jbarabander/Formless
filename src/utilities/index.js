@@ -6,8 +6,8 @@ var utilities = {};
 //   })
 // }
 
-function testAllValidatorsMap(value, validatorParamArr) {
-  var obj = {invalid: [], valid:[], passed: true};
+function testAllValidators(value, validatorParamArr) {
+  var obj = {invalid: [], valid:[], passed: true, failedOn: null};
   validatorParamArr.forEach(function(element) {
     if(!element.validator.validateProp(value, element.param)) {
       obj.invalid.push(element.validator.validatePropToObj(value, element.param));
@@ -16,10 +16,11 @@ function testAllValidatorsMap(value, validatorParamArr) {
       obj.valid.push(element.validator.validatePropToObj(value, element.param));
     }
   })
+  if(obj.invalid.length) obj.failedOn = obj.invalid[0];
   return obj;
 }
 
-utilities.testAllValidatorsMap = testAllValidatorsMap;
+utilities.testAllValidators = testAllValidators;
 
 module.exports = utilities;
 
