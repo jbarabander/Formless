@@ -9,7 +9,6 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj) 
 	var self = this;
 
 	if(typeof validatorParamsObj !== 'object') {
-		console.log('hi');
 		return;
 	}
 	var validatorArr = Array.isArray(validatorParamsObj) ? validatorParamsObj : [validatorParamsObj];
