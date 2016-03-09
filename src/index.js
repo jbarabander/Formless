@@ -1,4 +1,4 @@
 module.exports = {
-	FieldLIst: require('./FieldList'),
+	FieldList: require('./FieldList'),
 	Validator: require('./Validator')
 };

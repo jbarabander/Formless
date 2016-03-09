@@ -19,7 +19,8 @@ Validator.prototype.validateProp = function (prop, value) {
 }
 
 Validator.prototype.validatePropToObj = function(prop, value) {
-  var validated = this.validationFunc(prop, value);
+  // var validated = this.validationFunc(prop, value);
+  var validated = !!this.validationFunc(prop, value);
   var obj = {name: this.name, passed: validated};
   if(!validated && this.invalidMessage) obj.message = this.invalidMessage;
   return obj;
