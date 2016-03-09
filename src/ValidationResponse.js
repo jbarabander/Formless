@@ -3,14 +3,13 @@ function ValidationResult(value, validationParamsObj) {
 	this.invalid = [];
 	this.failedOn = null;
 	this.passed = true;
-	if(value && validationParamsObj) {
-		this.testValidators(value, validationParamsObj);
-	}
 }
 
 ValidationResult.prototype.testValidators = function(value, validatorParamsObj) {
 	var self = this;
+
 	if(typeof validatorParamsObj !== 'object') {
+		console.log('hi');
 		return;
 	}
 	var validatorArr = Array.isArray(validatorParamsObj) ? validatorParamsObj : [validatorParamsObj];
@@ -24,6 +23,7 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj) 
   	})
 
   	if(this.invalid.length) this.failedOn = this.invalid[0];
+  	return this;
 }
 
 module.exports = ValidationResult;

@@ -1,5 +1,5 @@
 var Validator = require('./Validator');
-var testAllValidators = require('./utilities').testAllValidators;
+var ValidationResponse = require('./ValidationResponse');
 
 function FieldList(obj, options) {
   this.fields = obj || {};
@@ -27,11 +27,12 @@ FieldList.prototype.validateModel = function (model, fields) {
       validatorsAndParams = currentField.map(function (element) {
         return self._parseValidatorObj(element);
       })
-      validationResult[currentKey] = testAllValidators(model[currentKey], validatorsAndParams);
     } else {
       validatorsAndParams = self._parseValidatorObj(currentField);
-      validationResult[currentKey] = validatorsAndParams.validator.validatePropToObj(model[currentKey], validatorsAndParams.param);
     }
+    console.log(validatorsAndParams);
+    var validationResponse = new ValidationResponse();
+    validationResult[currentKey] = validationResponse.testValidators(model[currentKey], validatorsAndParams);
   }
   return validationResult;
 }
@@ -39,8 +40,9 @@ FieldList.prototype.validateModel = function (model, fields) {
 FieldList.prototype._parseValidatorObj = function (validationObj) {
   var newParam;
   var newValidator;
-
-  if(validationObj.validator instanceof Validator || typeof validationObj.validator === 'function') {
+  if( typeof validationObj === 'string') {
+    newValidator = this._validatorStore[validationObj];
+  } else if(validationObj.validator instanceof Validator || typeof validationObj.validator === 'function') {
     newValidator = validationObj.validator;
   } else if(typeof validationObj.validator === 'string') {
     newValidator = this._validatorStore[validationObj.validator];
