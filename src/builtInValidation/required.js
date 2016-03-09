@@ -1,3 +1,3 @@
 function required(model) {
-	return model === '' || model === undefined || model === null;
+	return model !== '' && model !== undefined && model !== null;
 }
