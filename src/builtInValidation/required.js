@@ -1,3 +1,8 @@
 function required(model) {
-	return model !== '' && model !== undefined && model !== null;
+	// if(Array.isArray(model)) {
+	// 	return model.length !== 0;
+	// }
+	return model !== '' && model !== undefined && model !== null && !isNaN(model);
 }
+
+module.exports = required;

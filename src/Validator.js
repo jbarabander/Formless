@@ -9,7 +9,12 @@ function Validator(name, message, validationFunc) {
 }
 
 Validator.prototype.setInvalidMessage = function (invalidMessage) {
-  if(invalidMessage) {
+  if(invalidMessage === null) {
+    this.invalidMessage = null;
+    return;
+  }
+
+  if(typeof invalidMessage === 'string') {
     this.invalidMessage = invalidMessage;
   }
 }
@@ -18,11 +23,17 @@ Validator.prototype.validateProp = function (prop, value) {
   return this.validationFunc(prop, value);
 }
 
-Validator.prototype.validatePropToObj = function(prop, value) {
+Validator.prototype.validatePropToObj = function(prop, value, message) {
   // var validated = this.validationFunc(prop, value);
   var validated = !!this.validationFunc(prop, value);
   var obj = {name: this.name, passed: validated};
-  if(!validated && this.invalidMessage) obj.message = this.invalidMessage;
+  if(!validated) {
+    if(message && typeof message === 'string') {
+      obj.message = message;
+    } else if(this.invalidMessage) {
+      obj.message = this.invalidMessage;
+    } 
+  }
   return obj;
 }
 

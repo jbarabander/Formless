@@ -1,4 +1,4 @@
-var utilities = {};
+var Validator = require('../Validator');
 
 // function testAllValidators(value, validatorParamArr) {
 //   validatorParamArr.all(function (element) {
@@ -20,7 +20,18 @@ function testAllValidators(value, validatorParamArr) {
   return obj;
 }
 
-utilities.testAllValidators = testAllValidators;
+function assignDefaultValidators(validatorFuncCollection) {
+  var keys = Object.keys(validatorFuncCollection);
+  var validatorObj = {};
+  for(var i = 0; i < keys.length; i++) {
+    validatorObj[keys[i]] = new Validator(keys[i], validatorFuncCollection[keys[i]]);
+  }
+  return validatorObj;
+}
 
-module.exports = utilities;
+
+module.exports = {
+  testAllValidators: testAllValidators,
+  assignDefaultValidators: assignDefaultValidators
+};
 
