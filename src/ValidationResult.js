@@ -8,6 +8,7 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj) 
 	var self = this;
 
 	self.passed = true;
+	self.value = value;
 	
 	if(typeof validatorParamsObj !== 'object') {
 		return;
