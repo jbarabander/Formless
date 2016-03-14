@@ -8,6 +8,7 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj) 
 	var self = this;
 
 	self.passed = true;
+	self.value = value;
 	
 	if(typeof validatorParamsObj !== 'object') {
 		return;
@@ -39,6 +40,12 @@ ValidationResult.prototype.getFirstPassed = function() {
 
 ValidationResult.prototype.getLastPassed = function() {
 	return this.valid[this.valid.length - 1];
+}
+
+ValidationResult.prototype.getAllErrorMessages = function() {
+	return this.invalid.map(function(element) {
+		return element.message;
+	})
 }
 
 module.exports = ValidationResult;
