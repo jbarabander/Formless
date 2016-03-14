@@ -51,7 +51,8 @@ FieldList.prototype._parseValidatorObj = function (validationObj) {
   }
   if(!newValidator) throw new Error('Error: validator not found!');
   newParam = validationObj.param ? validationObj.param : null;
-  return {validator: newValidator, param: newParam};
+  newMessage = validationObj.message ? validationObj.message : null;
+  return {validator: newValidator, param: newParam, message: newMessage};
 }
 
 FieldList.prototype.register = function (validator, message, validatorFunc) {
@@ -84,6 +85,8 @@ FieldList.prototype.register = function (validator, message, validatorFunc) {
 FieldList.prototype.getValidator = function(name) {
   return this._validatorStore[name];
 }
+
+FieldList.prototype.defaultValidators = require('./builtInValidation');
 
 module.exports = FieldList;
 

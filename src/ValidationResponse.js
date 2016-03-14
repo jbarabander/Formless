@@ -1,13 +1,14 @@
 function ValidationResult(value, validationParamsObj) {
 	this.valid = [];
 	this.invalid = [];
-	this.failedOn = null;
-	this.passed = true;
+	// this.passed = true;
 }
 
 ValidationResult.prototype.testValidators = function(value, validatorParamsObj) {
 	var self = this;
 
+	self.passed = true;
+	
 	if(typeof validatorParamsObj !== 'object') {
 		return;
 	}
@@ -21,8 +22,23 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj) 
     	}
   	})
 
-  	if(this.invalid.length) this.failedOn = this.invalid[0];
   	return this;
+}
+
+ValidationResult.prototype.getFirstFailed = function() {
+	return this.invalid[0];
+}
+
+ValidationResult.prototype.getLastFailed = function() {
+	return this.invalid[this.invalid.length - 1];
+}
+
+ValidationResult.prototype.getFirstPassed = function() {
+	return this.valid[0];
+}
+
+ValidationResult.prototype.getLastPassed = function() {
+	return this.valid[this.valid.length - 1];
 }
 
 module.exports = ValidationResult;
