@@ -32,7 +32,6 @@ FieldList.prototype.validateModel = function (model, fields) {
     } else {
       validatorsAndParams = self._parseValidatorObj(currentField);
     }
-    console.log(validatorsAndParams);
     var validationResponse = new ValidationResponse();
     validationResult[currentKey] = validationResponse.testValidators(model[currentKey], validatorsAndParams);
   }
