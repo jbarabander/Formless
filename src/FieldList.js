@@ -1,5 +1,5 @@
 var Validator = require('./Validator');
-var ValidationResponse = require('./ValidationResponse');
+var ValidationResponse = require('./ValidationResult');
 var assignDefaultValidators = require('./utilities').assignDefaultValidators;
 
 function FieldList(obj, options) {
