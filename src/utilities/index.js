@@ -32,6 +32,6 @@ function assignDefaultValidators(validatorFuncCollection) {
 
 module.exports = {
   testAllValidators: testAllValidators,
-  assignDefaultValidators: 
+  assignDefaultValidators: assignDefaultValidators
 };
 
