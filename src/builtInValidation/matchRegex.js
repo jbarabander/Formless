@@ -1,3 +1,6 @@
 function matchRegex(prop, regex) {
-	return regex.test(prop);
+	var regexToTest = regex instanceof RegExp ? regex : new RegExp(regex);
+	return regexToTest.test(prop);
 }
+
+module.exports = matchRegex;

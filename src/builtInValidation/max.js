@@ -1,5 +1,7 @@
-function min(prop, value) {
+var isNumber = require('./isNumber');
 
+function max(prop, value) {
+	return !isNumber(value) || isNumber(prop) && parseFloat(prop) <= parseInt(value);
 }
 
-var numberRegex = /^\-?\d*\.?\d+$/;
+module.exports = max;
