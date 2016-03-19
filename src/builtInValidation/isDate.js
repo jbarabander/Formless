@@ -5,13 +5,6 @@ var DATE_REGEXP = constants.DATE_REGEXP;
 var ISO_DATE_REGEXP = constants.ISO_DATE_REGEXP;
 var GENERAL_DATE_REGEXP = constants.GENERAL_DATE_REGEXP;
 
-function isDate(prop) {
-	return validateDateInstance(prop) || validateDateString(prop);
-}
-
-// function validateDateNumber() {
-// 	return typeof 
-// }
 
 function validateDateString(prop) {
 	// var str = prop.toString();
@@ -25,6 +18,11 @@ function validateDateString(prop) {
 
 function validateDateInstance(prop) {
 	return Object.prototype.toString.call(prop) === '[object Date]' && !isNaN(prop.getTime());
+}
+
+
+function isDate(prop) {
+	return validateDateInstance(prop) || validateDateString(prop);
 }
 
 
