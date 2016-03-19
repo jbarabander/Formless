@@ -1,10 +1,21 @@
 var Validator = require('../Validator');
 
-// function testAllValidators(value, validatorParamArr) {
-//   validatorParamArr.all(function (element) {
-//     return element.validator.validateProp(value, element.param);
-//   })
-// }
+//Taken and modified slightly from here: http://stackoverflow.com/questions/5774931/javascript-regular-expression-to-validate-date/5775146#5775146
+function isValidMdy(s) {
+    var day, A = s.split(/\D+/).map(function(itm){
+        return parseInt(itm, 10)
+    });
+    try{
+        day = new Date(A[2], A[0]-1, A[1]);
+        if(day.getMonth()+1== A[0] && day.getDate()== A[1]) return true;
+        throw 'Bad Date Format';
+    }
+    catch(er){
+        return false;
+    }
+
+}
+
 
 function testAllValidators(value, validatorParamArr) {
   var obj = {invalid: [], valid:[], passed: true, failedOn: null};
@@ -32,6 +43,7 @@ function assignDefaultValidators(validatorFuncCollection) {
 
 module.exports = {
   testAllValidators: testAllValidators,
-  assignDefaultValidators: assignDefaultValidators
+  assignDefaultValidators: assignDefaultValidators,
+  isValidMdy: isValidMdy
 };
 

@@ -11,6 +11,9 @@ var WEEK_REGEXP = /^(\d{4})-W(\d\d)$/;
 var MONTH_REGEXP = /^(\d{4})-(\d\d)$/;
 var TIME_REGEXP = /^(\d\d):(\d\d)(?::(\d\d)(\.\d{1,3})?)?$/;
 
+//combining regexes
+var GENERAL_DATE_REGEXP = new RegExp('(' + DATE_REGEXP.source + '|' + ISO_DATE_REGEXP.source + ')');
+
 
 module.exports = {
 	ISO_DATE_REGEXP: ISO_DATE_REGEXP,
@@ -21,5 +24,6 @@ module.exports = {
 	DATETIMELOCAL_REGEXP: DATETIMELOCAL_REGEXP,
 	WEEK_REGEXP: WEEK_REGEXP,
 	MONTH_REGEXP: MONTH_REGEXP,
-	TIME_REGEXP: TIME_REGEXP
+	TIME_REGEXP: TIME_REGEXP,
+	GENERAL_DATE_REGEXP: GENERAL_DATE_REGEXP
 }
