@@ -25,7 +25,6 @@ describe('FieldList', function() {
 			strTest: [{validator: 'lengthValidator', params: [1, 8]}, {validator: 'testValidator', param: 'foo'}]
 		}
 		var validationResult = modelComparer.validateModel(model, comparisonFields);
-		console.dir(validationResult.strTest.valid);
 		expect(validationResult.strTest.passed).to.be.true;
 		done();
 	});
