@@ -13,13 +13,19 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj) 
 	if(typeof validatorParamsObj !== 'object') {
 		return;
 	}
+
 	var validatorArr = Array.isArray(validatorParamsObj) ? validatorParamsObj : [validatorParamsObj];
 	validatorArr.forEach(function(element) {
-    	if(!element.validator.validateProp(value, element.param)) {
-      		self.invalid.push(element.validator.validatePropToObj(value, element.param, element.message));
+		var params = element.params ? element.params : [];
+		if(element.param) {
+			params.unshift(element.param);
+		}
+
+    	if(!element.validator.validateProp(value, params)) {
+      		self.invalid.push(element.validator.validatePropToObj(value, params, element.message));
       		if(self.passed) self.passed = false;
     	} else {
-      		self.valid.push(element.validator.validatePropToObj(value, element.param));
+      		self.valid.push(element.validator.validatePropToObj(value, params));
     	}
   	})
 
