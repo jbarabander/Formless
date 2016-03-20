@@ -19,13 +19,26 @@ Validator.prototype.setInvalidMessage = function (invalidMessage) {
   }
 }
 
-Validator.prototype.validateProp = function (prop, value) {
-  return this.validationFunc(prop, value);
+Validator.prototype.validateProp = function (prop, values) {
+  if(!Array.isArray(values)) {
+    return this.validationFunc(prop, value);
+  }
+
+  var argumentsArr = values.slice();
+  argumentsArr.unshift(prop);
+  return this.validationFunc.apply(this, argumentsArr);
 }
 
-Validator.prototype.validatePropToObj = function(prop, value, message) {
-  // var validated = this.validationFunc(prop, value);
-  var validated = !!this.validationFunc(prop, value);
+Validator.prototype.validatePropToObj = function(prop, values, message) {
+  var validated;
+  if(!Array.isArray(values)) {
+    var validated = !!this.validationFunc(prop, values);
+  } else {
+    var argumentsArr = values.slice();
+    argumentsArr.unshift(prop);
+    validated = this.validationFunc.apply(this, argumentsArr);
+  }
+  
   var obj = {name: this.name, passed: validated};
   if(!validated) {
     if(message && typeof message === 'string') {

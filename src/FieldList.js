@@ -41,6 +41,7 @@ FieldList.prototype.validateModel = function (model, fields) {
 FieldList.prototype._parseValidatorObj = function (validationObj) {
   var newParam;
   var newValidator;
+  var newObj;
   if(typeof validationObj === 'string') {
     newValidator = this._validatorStore[validationObj];
   } else if(validationObj.validator instanceof Validator || typeof validationObj.validator === 'function') {
@@ -51,9 +52,19 @@ FieldList.prototype._parseValidatorObj = function (validationObj) {
     throw new Error('validator must be a Validator, string, or function');
   }
   if(!newValidator) throw new Error('Error: validator not found!');
+  
   newParam = validationObj.param ? validationObj.param : null;
   newMessage = validationObj.message ? validationObj.message : null;
-  return {validator: newValidator, param: newParam, message: newMessage};
+  newObj = {validator: newValidator, param: newParam, message: newMessage};
+
+  if(validationObj.params) {
+    if(!Array.isArray(validationObj.params)) {
+      throw new Error('params must be an array');
+    }
+    newObj.params = validationObj.params;
+  }
+  
+  return newObj;
 }
 
 FieldList.prototype.register = function (validator, message, validatorFunc) {
