@@ -48,7 +48,7 @@ FieldList.prototype._parseValidatorObj = function (validationObj) {
   } else if(typeof validationObj.validator === 'string') {
     newValidator = this._validatorStore[validationObj.validator];
   } else {
-    throw new Error('validator must either be an instance of Validator, or must be a string or function');
+    throw new Error('validator must be a Validator, string, or function');
   }
   if(!newValidator) throw new Error('Error: validator not found!');
   newParam = validationObj.param ? validationObj.param : null;
