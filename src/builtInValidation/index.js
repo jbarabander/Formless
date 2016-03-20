@@ -10,4 +10,8 @@ module.exports = {
 	formlessMaxLength: require('./maxLength'),
 	formlessMinLength: require('./minLength'),
 	formlessRequired: require('./required'),
-}
+	formlessStrictEquals: require('./strictEquals'),
+	formlessRelaxedEquals: require('./relaxedEquals'),
+	formlessRelaxedNotEquals: require('./relaxedDoesNotEqual'),
+	formLessStrictNotEquals: require('./strictDoesNotEqual')
+};
