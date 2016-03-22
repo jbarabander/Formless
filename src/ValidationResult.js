@@ -17,7 +17,7 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj) 
 	var validatorArr = Array.isArray(validatorParamsObj) ? validatorParamsObj : [validatorParamsObj];
 	validatorArr.forEach(function(element) {
 		var params = element.params ? element.params : [];
-		if(element.param) {
+		if(element.param !== undefined && element.param !== null) {
 			params.unshift(element.param);
 		}
 
