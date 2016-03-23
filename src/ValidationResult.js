@@ -49,9 +49,13 @@ ValidationResult.prototype.getLastPassed = function() {
 }
 
 ValidationResult.prototype.getAllErrorMessages = function() {
-	return this.invalid.map(function(element) {
-		return element.message;
-	})
+	var errorsArr = [];
+	this.invalid.reduce(function(prev, curr) {
+		if(curr.message) {
+			prev.push(curr.message);
+		}
+	}, errorsArr);
+	return errorsArr;
 }
 
 module.exports = ValidationResult;
