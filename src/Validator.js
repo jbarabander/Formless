@@ -21,7 +21,7 @@ Validator.prototype.setInvalidMessage = function (invalidMessage) {
 
 Validator.prototype.validateProp = function (prop, values) {
   if(!Array.isArray(values)) {
-    return this.validationFunc(prop, value);
+    return this.validationFunc(prop, values);
   }
 
   var argumentsArr = values.slice();
