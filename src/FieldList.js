@@ -13,7 +13,7 @@ FieldList.prototype.setDefaultFields = function(fields) {
 }
 
 
-FieldList.prototype.validateModel = function (model, fields) {
+FieldList.prototype.compare = function (model, fields) {
   var keys = Object.keys(model);
   var validationResult = {};
   var self = this;
@@ -33,7 +33,7 @@ FieldList.prototype.validateModel = function (model, fields) {
       validatorsAndParams = self._parseValidatorObj(currentField);
     }
     var validationResponse = new ValidationResponse();
-    validationResult[currentKey] = validationResponse.testValidators(model[currentKey], validatorsAndParams);
+    validationResult[currentKey] = validationResponse.testValidators(model[currentKey], validatorsAndParams, model);
   }
   return validationResult;
 }
@@ -91,6 +91,7 @@ FieldList.prototype.register = function (validator, message, validatorFunc) {
 
   if(newValidator) {
     this._validatorStore[newValidator.name] = newValidator;
+    return newValidator;
   }
 }
 
@@ -103,7 +104,7 @@ FieldList.prototype.mixValidators = function(name, message, validatorFunc) {
     newValidator = new Validator(name, message, validatorFunc.bind(this, validationFunctions))
   }
   if(newValidator) {
-    this.register(newValidator)
+    return this.register(newValidator)
   }
 }
 

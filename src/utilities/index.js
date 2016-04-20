@@ -5,12 +5,12 @@ function isValidMdy(s) {
     var day, A = s.split(/\D+/).map(function(itm){
         return parseInt(itm, 10)
     });
-    try{
+    try {
         day = new Date(A[2], A[0]-1, A[1]);
         if(day.getMonth()+1== A[0] && day.getDate()== A[1]) return true;
         throw 'Bad Date Format';
     }
-    catch(er){
+    catch(err) {
         return false;
     }
 
@@ -24,7 +24,6 @@ function assignDefaultValidators(validatorFuncCollection) {
   }
   return validatorObj;
 }
-
 
 module.exports = {
   assignDefaultValidators: assignDefaultValidators,
