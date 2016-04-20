@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var FieldList = require('../src').FieldList;
+var FieldList = require('../src');
 
 describe('FieldList', function() {
 	var model = {
@@ -27,7 +27,7 @@ describe('FieldList', function() {
 			arrTest: [{validator: 'lengthValidator', params: [2, 5]}, {validator: 'formlessRequired'}],
 			objTest: [{validator: 'formlessRequired'}, {validator: 'formlessStrictEquals', param: {}}]
 		}
-		var validationResult = modelComparer.validateModel(model, comparisonFields);
+		var validationResult = modelComparer.compare(model, comparisonFields);
 		// console.log(validationResult);
 		expect(validationResult.strTest.passed).to.be.true;
 		done();
