@@ -94,6 +94,29 @@ FieldList.prototype.register = function (validator, message, validatorFunc) {
   }
 }
 
+FieldList.prototype.mixValidators = function(name, message, validatorFunc) {
+  var validationFunctions = this.getValidatorFunctions();
+  var newValidator;
+  if(typeof message === 'function') {
+    newValidator = new Validator(name, message.bind(this, validationFunctions));
+  } else if(typeof message === 'string') {
+    newValidator = new Validator(name, message, validatorFunc.bind(this, validationFunctions))
+  }
+  if(newValidator) {
+    this.register(newValidator)
+  }
+}
+
+FieldList.prototype.getValidatorFunctions = function() {
+  var validationFuncObj = {};
+  var keys = Object.keys(this._validatorStore);
+  for(var i = 0; i < keys.length; i++) {
+    validationFuncObj[keys[i]] = this._validatorStore[keys[i]].validationFunc;
+  }
+
+  return validationFuncObj;
+}
+
 FieldList.prototype.getValidator = function(name) {
   return this._validatorStore[name];
 }
