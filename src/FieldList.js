@@ -13,7 +13,7 @@ FieldList.prototype.setDefaultFields = function(fields) {
 }
 
 
-FieldList.prototype.validateModel = function (model, fields) {
+FieldList.prototype.compare = function (model, fields) {
   var keys = Object.keys(model);
   var validationResult = {};
   var self = this;
