@@ -91,6 +91,7 @@ FieldList.prototype.register = function (validator, message, validatorFunc) {
 
   if(newValidator) {
     this._validatorStore[newValidator.name] = newValidator;
+    return newValidator;
   }
 }
 
@@ -103,7 +104,7 @@ FieldList.prototype.mixValidators = function(name, message, validatorFunc) {
     newValidator = new Validator(name, message, validatorFunc.bind(this, validationFunctions))
   }
   if(newValidator) {
-    this.register(newValidator)
+    return this.register(newValidator)
   }
 }
 
