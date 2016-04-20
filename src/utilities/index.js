@@ -25,27 +25,6 @@ function assignDefaultValidators(validatorFuncCollection) {
   return validatorObj;
 }
 
-// function naiveClone(obj) {
-//   var newObj;
-//   if(obj instanceof Array) {
-//     newObj = [];
-//   } else if(typeof obj === 'object') {
-//     newObj = {}
-//   } else {
-//     throw new Error('Can only clone an object or array');
-//   }
-//   //this is a simple version of clone but this is a positive as we don't care about the prototype
-//   //we just want the ennumerable properties of the object
-//   var keys = Object.keys(obj);
-//   for(var i = 0; i < keys.length; i++) {
-//     var currentKey = keys[i];
-//     var currentProp = obj[keys[i]];
-//     if(typeof currentProp === 'object') {
-//       newObj[currentKey] = naiveClone
-//     }
-//   }
-// }
-
 module.exports = {
   assignDefaultValidators: assignDefaultValidators,
   isValidMdy: isValidMdy
