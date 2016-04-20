@@ -1,4 +1,3 @@
-module.exports = {
-	FieldList: require('./FieldList'),
-	Validator: require('./Validator')
-};
+var exports = module.exports = require('./FieldList');
+
+exports.Validator = require('./Validator');
