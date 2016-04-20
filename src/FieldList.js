@@ -33,7 +33,7 @@ FieldList.prototype.compare = function (model, fields) {
       validatorsAndParams = self._parseValidatorObj(currentField);
     }
     var validationResponse = new ValidationResponse();
-    validationResult[currentKey] = validationResponse.testValidators(model[currentKey], validatorsAndParams);
+    validationResult[currentKey] = validationResponse.testValidators(model[currentKey], validatorsAndParams, model);
   }
   return validationResult;
 }

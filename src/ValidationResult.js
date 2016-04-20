@@ -4,7 +4,7 @@ function ValidationResult(value, validationParamsObj) {
 	// this.passed = true;
 }
 
-ValidationResult.prototype.testValidators = function(value, validatorParamsObj) {
+ValidationResult.prototype.testValidators = function(value, validatorParamsObj, model) {
 	var self = this;
 
 	self.passed = true;
@@ -19,6 +19,9 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj) 
 		var params = element.params ? element.params : [];
 		if(element.param !== undefined && element.param !== null) {
 			params.unshift(element.param);
+		}
+		if(element.validator.getModelAccessStatus()) {
+			params.unshift(model);
 		}
 
     	if(!element.validator.validateProp(value, params)) {

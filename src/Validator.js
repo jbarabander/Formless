@@ -1,11 +1,24 @@
 function Validator(name, message, validationFunc) {
   this.name = name;
+  this._fullModelAccess = false;
   if(typeof message === 'function') {
     this.validationFunc = message;
   } else if(typeof message === 'string') {
     this.invalidMessage = message;
     this.validationFunc = validationFunc;
   }
+}
+
+Validator.prototype.enableModelAccess = function() {
+  this._fullModelAccess = true;
+}
+
+Validator.prototype.disableModelAccess = function() {
+  this._fullModelAccess = false;
+}
+
+Validator.prototype.getModelAccessStatus = function() {
+  return this._fullModelAccess;
 }
 
 Validator.prototype.setInvalidMessage = function (invalidMessage) {
