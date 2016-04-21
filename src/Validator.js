@@ -1,3 +1,5 @@
+var checkTypeIsCorrect = require('./utilities').checkTypeIsCorrect;
+
 function Validator(name, message, validationFunc) {
   this.name = name;
   this._fullModelAccess = false;
@@ -9,13 +11,26 @@ function Validator(name, message, validationFunc) {
   }
 }
 
-Validator.prototype.enableModelAccess = function() {
+Validator.prototype._enableModelAccessOnly = function() {
   this._fullModelAccess = true;
 }
 
-Validator.prototype.disableModelAccess = function() {
+Validator.prototype._disableModelAccessOnly = function() {
   this._fullModelAccess = false;
 }
+
+Validator.prototype.enableModelAccess = function(func) {
+  checkTypeIsCorrect(func, 'function');
+  this._fullModelAccess = true;
+  this.validationFunc = func;
+}
+
+Validator.prototype.disableModelAccess = function(func) {
+  checkTypeIsCorrect(func, 'function');
+  this._fullModelAccess = false;
+  this.validationFunc = func;
+}
+
 
 Validator.prototype.getModelAccessStatus = function() {
   return this._fullModelAccess;
@@ -51,14 +66,14 @@ Validator.prototype.validatePropToObj = function(prop, values, message) {
     argumentsArr.unshift(prop);
     validated = this.validationFunc.apply(this, argumentsArr);
   }
-  
+
   var obj = {name: this.name, passed: validated};
   if(!validated) {
     if(message && typeof message === 'string') {
       obj.message = message;
     } else if(this.invalidMessage) {
       obj.message = this.invalidMessage;
-    } 
+    }
   }
   return obj;
 }

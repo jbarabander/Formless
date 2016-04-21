@@ -1,11 +1,21 @@
 var Validator = require('./Validator');
 var ValidationResponse = require('./ValidationResult');
-var assignDefaultValidators = require('./utilities').assignDefaultValidators;
+var builtInValidation = require('./builtInValidation');
+
+function assignDefaultValidators(validatorFuncCollection) {
+  var keys = Object.keys(validatorFuncCollection);
+  var validatorObj = {};
+  for(var i = 0; i < keys.length; i++) {
+    validatorObj[keys[i]] = new Validator(keys[i], validatorFuncCollection[keys[i]]);
+  }
+  return validatorObj;
+}
+
 
 function FieldList(obj, options) {
   this.fields = obj || {};
   // this._validatorStore = {};
-  this._validatorStore = assignDefaultValidators(require('./builtInValidation'));
+  this._validatorStore = assignDefaultValidators(builtInValidation);
 }
 
 FieldList.prototype.setDefaultFields = function(fields) {
@@ -52,7 +62,7 @@ FieldList.prototype._parseValidatorObj = function (validationObj) {
     throw new Error('validator must be a Validator, string, or function');
   }
   if(!newValidator) throw new Error('Error: validator not found!');
-  
+
   newParam = validationObj.param ? validationObj.param : null;
   newMessage = validationObj.message ? validationObj.message : null;
   newObj = {validator: newValidator, param: newParam, message: newMessage};
@@ -63,7 +73,7 @@ FieldList.prototype._parseValidatorObj = function (validationObj) {
     }
     newObj.params = validationObj.params;
   }
-  
+
   return newObj;
 }
 
@@ -81,11 +91,11 @@ FieldList.prototype.register = function (validator, message, validatorFunc) {
     }
     // if(arguments.length === 2)
     // newValidator = new Validator(validator, validatorFunc);
-  } 
+  }
   // else if (typeof validator === 'function' && validator.name !== undefined) {
   //   newValidator = new Validator(validator.name, validator);
   //   if(arguments.length === 2 && typeof message === 'string') {
-  //    newValidator.setErrorMessage(message); 
+  //    newValidator.setErrorMessage(message);
   //   }
   // }
 
@@ -125,4 +135,3 @@ FieldList.prototype.getValidator = function(name) {
 // FieldList.prototype.defaultValidators = assignDefaultValidators(require('./builtInValidation'));
 
 module.exports = FieldList;
-

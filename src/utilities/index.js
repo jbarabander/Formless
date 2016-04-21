@@ -25,8 +25,15 @@ function assignDefaultValidators(validatorFuncCollection) {
   return validatorObj;
 }
 
+function checkTypeIsCorrect(arg, type) {
+  var argType = typeof arg;
+  if(argType !== 'type') {
+    throw new Error('Expected: ' + type + ' but got: ' + argType);
+  }
+}
+
 module.exports = {
   assignDefaultValidators: assignDefaultValidators,
-  isValidMdy: isValidMdy
+  isValidMdy: isValidMdy,
+  checkTypeIsCorrect: checkTypeIsCorrect
 };
-
