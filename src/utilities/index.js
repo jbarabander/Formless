@@ -28,7 +28,7 @@ function assignDefaultValidators(validatorFuncCollection) {
 function checkTypeIsCorrect(arg, type) {
   var argType = typeof arg;
   if(argType !== 'type') {
-    throw new Error('Expected: ' + type + ' but got: ' + argType);
+    throw new Error('Expected ' + type + ' but got ' + argType);
   }
 }
 
