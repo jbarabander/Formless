@@ -77,7 +77,7 @@ FieldList.prototype._parseValidatorObj = function (validationObj) {
   return newObj;
 }
 
-FieldList.prototype.register = function (validator, message, validatorFunc) {
+FieldList.prototype.register = function (validator, message, validatorFunc, options) {
   var newValidator;
   if (validator instanceof Validator) {
     newValidator = validator;
@@ -92,6 +92,10 @@ FieldList.prototype.register = function (validator, message, validatorFunc) {
     // if(arguments.length === 2)
     // newValidator = new Validator(validator, validatorFunc);
   }
+
+  if(options && options.modelAccess && newValidator) {
+    newValidator._fullModelAccess = true;
+  }
   // else if (typeof validator === 'function' && validator.name !== undefined) {
   //   newValidator = new Validator(validator.name, validator);
   //   if(arguments.length === 2 && typeof message === 'string') {
@@ -105,7 +109,7 @@ FieldList.prototype.register = function (validator, message, validatorFunc) {
   }
 }
 
-FieldList.prototype.mixValidators = function(name, message, validatorFunc) {
+FieldList.prototype.mixValidators = function(name, message, validatorFunc, options) {
   var validationFunctions = this.getValidatorFunctions();
   var newValidator;
   if(typeof message === 'function') {
@@ -113,6 +117,11 @@ FieldList.prototype.mixValidators = function(name, message, validatorFunc) {
   } else if(typeof message === 'string') {
     newValidator = new Validator(name, message, validatorFunc.bind(this, validationFunctions))
   }
+
+  if(options && options.modelAccess && newValidator) {
+    newValidator._fullModelAccess = true;
+  }
+
   if(newValidator) {
     return this.register(newValidator)
   }
