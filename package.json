@@ -10,7 +10,8 @@
     "formless",
     "validation",
     "form",
-    "model"
+    "model",
+    "html-less"
   ],
   "author": "Justin Barabander",
   "license": "ISC",
