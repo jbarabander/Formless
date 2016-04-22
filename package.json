@@ -6,6 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "formless",
+    "validation",
+    "form",
+    "model"
+  ],
   "author": "Justin Barabander",
   "license": "ISC",
   "devDependencies": {
