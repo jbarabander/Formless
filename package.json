@@ -1,6 +1,6 @@
 {
   "name": "Formless",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Do form validation without all the HTML!",
   "main": "src/index.js",
   "scripts": {

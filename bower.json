@@ -1,0 +1,25 @@
+{
+  "name": "Formless",
+  "description": "Do form validation without all the HTML!",
+  "main": "src/index.js",
+  "authors": [
+    "Justin Barabander"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "formless",
+    "validation",
+    "form",
+    "model",
+    "html-less"
+  ],
+  "homepage": "https://github.com/jbarabander/Formless",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
