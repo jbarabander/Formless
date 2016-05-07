@@ -118,8 +118,13 @@ FieldList.prototype.mixValidators = function(name, message, validatorFunc, optio
     newValidator = new Validator(name, message, validatorFunc.bind(this, validationFunctions))
   }
 
-  if(options && options.modelAccess && newValidator) {
-    newValidator._fullModelAccess = true;
+  if(options && newValidator) {
+    if(options.modelAccess) {
+      newValidator._fullModelAccess = true;
+    }
+    if(options.async) {
+      newValidator.async = true;
+    }
   }
 
   if(newValidator) {

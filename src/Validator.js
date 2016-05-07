@@ -3,6 +3,7 @@ var checkTypeIsCorrect = require('./utilities').checkTypeIsCorrect;
 function Validator(name, message, validationFunc) {
   this.name = name;
   this._fullModelAccess = false;
+  this.async = false;
   if(typeof message === 'function') {
     this.validationFunc = message;
   } else if(typeof message === 'string') {
@@ -47,7 +48,11 @@ Validator.prototype.setInvalidMessage = function (invalidMessage) {
   }
 }
 
+//TODO: Fix validateProp and validatePropToObj
+//Now that I've thought about it more these 2 functions should only take in prop 
+//and then should be able to take in as many parameters as they want
 Validator.prototype.validateProp = function (prop, values) {
+
   if(!Array.isArray(values)) {
     return this.validationFunc(prop, values);
   }

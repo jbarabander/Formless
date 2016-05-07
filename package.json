@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepublish": "./node_modules/.bin/browserify src/index.js > Formless.js --standalone Formless"
   },
-  "repository" :
-  { "type" : "git", 
-    "url" : "https://github.com/jbarabander/Formless.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jbarabander/Formless.git"
   },
   "keywords": [
     "formless",
@@ -24,5 +24,8 @@
     "browserify": "^13.0.0",
     "chai": "^3.5.0",
     "mocha": "^2.4.5"
+  },
+  "dependencies": {
+    "bluebird": "^3.3.5"
   }
 }
