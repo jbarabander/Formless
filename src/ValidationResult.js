@@ -25,11 +25,12 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj, 
 		}
 		params.unshift(value);
 
-    	if(!element.validator.validateProp.apply(element.validator, params)) {
-      		self.invalid.push(element.validator.validatePropToObj.apply(element.validator, params));
+		var validationResult = element.validator.validatePropToObj.apply(element.validator, params);
+    	if(validationResult.passed !== true) {
+      		self.invalid.push(validationResult);
       		if(self.passed) self.passed = false;
     	} else {
-      		self.valid.push(element.validator.validatePropToObj.apply(element.validator, params));
+      		self.valid.push(validationResult);
     	}
   	})
 
