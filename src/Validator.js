@@ -52,18 +52,18 @@ Validator.prototype.setInvalidMessage = function (invalidMessage) {
 //TODO: Fix validateProp and validatePropToObj
 //Now that I've thought about it more these 2 functions should only take in prop 
 //and then should be able to take in as many parameters as they want
-Validator.prototype.validateProp = function (prop, values) {
+// Validator.prototype.validateProp = function (prop, values) {
 
-  if(!Array.isArray(values)) {
-    return this.validationFunc(prop, values);
-  }
+//   if(!Array.isArray(values)) {
+//     return this.validationFunc(prop, values);
+//   }
 
-  var argumentsArr = values.slice();
-  argumentsArr.unshift(prop);
-  return this.validationFunc.apply(this, argumentsArr);
-}
+//   var argumentsArr = values.slice();
+//   argumentsArr.unshift(prop);
+//   return this.validationFunc.apply(this, argumentsArr);
+// }
 
-Validator.prototype.newValidateProp = function() {
+Validator.prototype.validateProp = function() {
   if(!this.async) {
     return this.validationFunc.apply(this, arguments);
   }
@@ -78,7 +78,7 @@ Validator.prototype.newValidateProp = function() {
   });
 }
 
-Validator.prototype.newValidatePropToObj = function() {
+Validator.prototype.validatePropToObj = function() {
   var validated;
   if(!this.async) {
     validated = !!this.validationFunc.apply(this, arguments);
@@ -103,25 +103,25 @@ Validator.prototype.newValidatePropToObj = function() {
   });
 }
 
-Validator.prototype.validatePropToObj = function(prop, values, message) {
-  var validated;
-  if(!Array.isArray(values)) {
-    var validated = !!this.validationFunc(prop, values);
-  } else {
-    var argumentsArr = values.slice();
-    argumentsArr.unshift(prop);
-    validated = this.validationFunc.apply(this, argumentsArr);
-  }
+// Validator.prototype.validatePropToObj = function(prop, values, message) {
+//   var validated;
+//   if(!Array.isArray(values)) {
+//     var validated = !!this.validationFunc(prop, values);
+//   } else {
+//     var argumentsArr = values.slice();
+//     argumentsArr.unshift(prop);
+//     validated = this.validationFunc.apply(this, argumentsArr);
+//   }
 
-  var obj = {name: this.name, passed: validated};
-  if(!validated) {
-    if(message && typeof message === 'string') {
-      obj.message = message;
-    } else if(this.invalidMessage) {
-      obj.message = this.invalidMessage;
-    }
-  }
-  return obj;
-}
+//   var obj = {name: this.name, passed: validated};
+//   if(!validated) {
+//     if(message && typeof message === 'string') {
+//       obj.message = message;
+//     } else if(this.invalidMessage) {
+//       obj.message = this.invalidMessage;
+//     }
+//   }
+//   return obj;
+// }
 
 module.exports = Validator;

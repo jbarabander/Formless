@@ -23,12 +23,13 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj, 
 		if(element.validator.getModelAccessStatus()) {
 			params.unshift(model);
 		}
+		params.unshift(value);
 
-    	if(!element.validator.validateProp(value, params)) {
-      		self.invalid.push(element.validator.validatePropToObj(value, params, element.message));
+    	if(!element.validator.validateProp.apply(element.validator, params)) {
+      		self.invalid.push(element.validator.validatePropToObj.apply(element.validator, params));
       		if(self.passed) self.passed = false;
     	} else {
-      		self.valid.push(element.validator.validatePropToObj(value, params));
+      		self.valid.push(element.validator.validatePropToObj.apply(element.validator, params));
     	}
   	})
 
