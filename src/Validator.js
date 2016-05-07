@@ -1,4 +1,5 @@
 var checkTypeIsCorrect = require('./utilities').checkTypeIsCorrect;
+var Promise = require('bluebird');
 
 function Validator(name, message, validationFunc) {
   this.name = name;
@@ -60,6 +61,46 @@ Validator.prototype.validateProp = function (prop, values) {
   var argumentsArr = values.slice();
   argumentsArr.unshift(prop);
   return this.validationFunc.apply(this, argumentsArr);
+}
+
+Validator.prototype.newValidateProp = function() {
+  if(!this.async) {
+    return this.validationFunc.apply(this, arguments);
+  }
+  var self = this;
+  var newArgs = Array.prototype.slice.call(arguments);
+  return new Promise(function(resolve, reject) {
+    newArgs[self.validationFunc.length - 1] = function(err, result) {
+      if(err) return reject(err);
+      return resolve(result);
+    };
+    self.validationFunc.apply(this, newArgs);
+  });
+}
+
+Validator.prototype.newValidatePropToObj = function() {
+  var validated;
+  if(!this.async) {
+    validated = !!this.validationFunc.apply(this, arguments);
+    var obj = {name: this.name, passed: validated};
+    if(!validated && this.invalidMessage) {
+      obj.message = this.invalidMessage;
+    }
+    return obj;
+  }
+  var self = this;
+  var newArgs = Array.prototype.slice.call(arguments);
+  return new Promise(function(resolve, reject) {
+    newArgs[self.validationFunc.length - 1] = function(err, result) {
+      if(err) return reject(err);
+      validated = result;
+      var obj = {name: self.name, passed: validated};
+      if(!validated && self.invalidMessage) {
+        obj.message = this.invalidMessage;
+      }
+      return resolve(obj);
+    };
+  });
 }
 
 Validator.prototype.validatePropToObj = function(prop, values, message) {
