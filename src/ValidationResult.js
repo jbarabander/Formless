@@ -38,10 +38,9 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj, 
 		.then(function() {
 			return self;
 		})
-	} else {
-		self._putResultsInRightBuckets(newValidatorArr);
-		return self;
 	}
+	self._putResultsInRightBuckets(newValidatorArr);
+	return self;
 }
 
 ValidationResult.prototype._putResultsInRightBuckets = function(arr) {
