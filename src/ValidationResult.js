@@ -1,3 +1,5 @@
+var Promise = require('bluebird');
+
 function ValidationResult(value, validationParamsObj) {
 	this.valid = [];
 	this.invalid = [];
@@ -6,6 +8,7 @@ function ValidationResult(value, validationParamsObj) {
 
 ValidationResult.prototype.testValidators = function(value, validatorParamsObj, model) {
 	var self = this;
+	var async = false;
 
 	self.passed = true;
 	self.value = value;
@@ -14,6 +17,7 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj, 
 		return;
 	}
 
+	var newValidatorArr = [];
 	var validatorArr = Array.isArray(validatorParamsObj) ? validatorParamsObj : [validatorParamsObj];
 	validatorArr.forEach(function(element) {
 		var params = element.params ? element.params : [];
@@ -25,16 +29,39 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj, 
 		}
 		params.unshift(value);
 
-		var validationResult = element.validator.validatePropToObj.apply(element.validator, params);
-    	if(validationResult.passed !== true) {
-      		self.invalid.push(validationResult);
-      		if(self.passed) self.passed = false;
-    	} else {
-      		self.valid.push(validationResult);
-    	}
+		if(!async && element.validator.async) {
+			async = true;
+		}
+
+		newValidatorArr.push(element.validator.validatePropToObj.apply(element.validator, params));
   	})
 
-  	return this;
+	if(async) {
+		return Promise.all(newValidatorArr)
+		.then(function(resultsArr) {
+			self._putResultsIntoRightBucket(resultsArr);
+		})
+		.then(function() {
+			return self;
+		})
+	} else {
+		self._putResultsIntoRightBucket(newValidatorArr);
+		return self;
+	}
+}
+
+ValidationResult.prototype._putResultsIntoRightBucket = function(arr) {
+	var self = this;
+	arr.forEach(function(validationResult) {
+		if(validationResult.passed !== true) {
+			self.invalid.push(validationResult);
+			if(self.passed) {
+				self.passed = false;
+			}
+		} else {
+			self.valid.push(validationResult);
+		}
+	})
 }
 
 ValidationResult.prototype.getFirstFailed = function() {

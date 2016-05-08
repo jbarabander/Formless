@@ -96,6 +96,7 @@ Validator.prototype.validatePropToObj = function() {
       validated = result;
       var obj = {name: self.name, passed: validated};
       if(!validated && self.invalidMessage) {
+        //we need to add back in message functionality somehow
         obj.message = this.invalidMessage;
       }
       return resolve(obj);
