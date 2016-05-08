@@ -1,4 +1,5 @@
 var Promise = require('bluebird');
+var assignParams = require('./utilities').assignParams;
 
 function ValidationResult(value, validationParamsObj) {
 	this.valid = [];
@@ -20,14 +21,7 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj, 
 	var newValidatorArr = [];
 	var validatorArr = Array.isArray(validatorParamsObj) ? validatorParamsObj : [validatorParamsObj];
 	validatorArr.forEach(function(element) {
-		var params = element.params ? element.params : [];
-		if(element.param !== undefined && element.param !== null) {
-			params.unshift(element.param);
-		}
-		if(element.validator.getModelAccessStatus()) {
-			params.unshift(model);
-		}
-		params.unshift(value);
+		var params = assignParams(element, value);
 
 		if(!async && element.validator.async) {
 			async = true;
@@ -39,18 +33,18 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj, 
 	if(async) {
 		return Promise.all(newValidatorArr)
 		.then(function(resultsArr) {
-			self._putResultsIntoRightBucket(resultsArr);
+			self._putResultsInRightBuckets(resultsArr);
 		})
 		.then(function() {
 			return self;
 		})
 	} else {
-		self._putResultsIntoRightBucket(newValidatorArr);
+		self._putResultsInRightBuckets(newValidatorArr);
 		return self;
 	}
 }
 
-ValidationResult.prototype._putResultsIntoRightBucket = function(arr) {
+ValidationResult.prototype._putResultsInRightBuckets = function(arr) {
 	var self = this;
 	arr.forEach(function(validationResult) {
 		if(validationResult.passed !== true) {

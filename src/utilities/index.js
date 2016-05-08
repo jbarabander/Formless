@@ -32,8 +32,21 @@ function checkTypeIsCorrect(arg, type) {
   }
 }
 
+function assignParams(element, value) {
+  var params = element.params ? element.params : [];
+    if(element.param !== undefined && element.param !== null) {
+      params.unshift(element.param);
+    }
+    if(element.validator.getModelAccessStatus()) {
+      params.unshift(model);
+    }
+    params.unshift(value);
+    return params;
+}
+
 module.exports = {
   assignDefaultValidators: assignDefaultValidators,
   isValidMdy: isValidMdy,
-  checkTypeIsCorrect: checkTypeIsCorrect
+  checkTypeIsCorrect: checkTypeIsCorrect,
+  assignParams: assignParams
 };

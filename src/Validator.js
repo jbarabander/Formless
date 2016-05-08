@@ -81,7 +81,7 @@ Validator.prototype.validatePropAsync = function() {
       return resolve(result);
     })
     return unwrappedValidationFunc.apply(self, newArgs);
-  })
+  });
 }
 
 Validator.prototype.validatePropToObjAsync = function() {
@@ -98,7 +98,7 @@ Validator.prototype.validatePropToObjAsync = function() {
       return resolve(obj);
     });
     return unwrappedValidationFunc.apply(self, newArgs);
-  })
+  });
 }
 
 module.exports = Validator;
