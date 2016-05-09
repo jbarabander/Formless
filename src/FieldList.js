@@ -1,6 +1,7 @@
 var Validator = require('./Validator');
 var ValidationResponse = require('./ValidationResult');
 var builtInValidation = require('./builtInValidation');
+var Promise = require('bluebird');
 
 function assignDefaultValidators(validatorFuncCollection) {
   var keys = Object.keys(validatorFuncCollection);

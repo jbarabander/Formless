@@ -28,8 +28,9 @@ describe('FieldList', function() {
 			objTest: [{validator: 'formlessRequired'}, {validator: 'formlessStrictEquals', param: {}, message: 'This is not the correct object'}]
 		}
 		var validationResult = modelComparer.compare(model, comparisonFields);
-		console.log(validationResult.objTest.invalid[0]);
 		expect(validationResult.strTest.passed).to.be.true;
+		expect(validationResult.arrTest.passed).to.be.true;
+		expect(validationResult.objTest.passed).to.be.false;
 		done();
 	});
 })
