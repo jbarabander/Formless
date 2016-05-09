@@ -25,10 +25,10 @@ describe('FieldList', function() {
 			strTest: [{validator: 'lengthValidator', params: [1, 8]}, {validator: 'testValidator', param: 'foo'}],
 			numTest: 'formlessIsNumber',
 			arrTest: [{validator: 'lengthValidator', params: [2, 5]}, {validator: 'formlessRequired'}],
-			objTest: [{validator: 'formlessRequired'}, {validator: 'formlessStrictEquals', param: {}}]
+			objTest: [{validator: 'formlessRequired'}, {validator: 'formlessStrictEquals', param: {}, message: 'This is not the correct object'}]
 		}
 		var validationResult = modelComparer.compare(model, comparisonFields);
-		console.log(validationResult);
+		console.log(validationResult.objTest.invalid[0]);
 		expect(validationResult.strTest.passed).to.be.true;
 		done();
 	});

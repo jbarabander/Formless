@@ -33,20 +33,23 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj, 
 	if(async) {
 		return Promise.all(newValidatorArr)
 		.then(function(resultsArr) {
-			self._putResultsInRightBuckets(resultsArr);
+			self._putResultsInRightBuckets(resultsArr, validatorArr);
 		})
 		.then(function() {
 			return self;
 		})
 	}
-	self._putResultsInRightBuckets(newValidatorArr);
+	self._putResultsInRightBuckets(newValidatorArr, validatorArr);
 	return self;
 }
 
-ValidationResult.prototype._putResultsInRightBuckets = function(arr) {
+ValidationResult.prototype._putResultsInRightBuckets = function(arr, oldValidatorArr) {
 	var self = this;
-	arr.forEach(function(validationResult) {
+	arr.forEach(function(validationResult, i) {
 		if(validationResult.passed !== true) {
+			if(oldValidatorArr && typeof oldValidatorArr[i].message === 'string') {
+				validationResult.message = oldValidatorArr[i].message;
+			}
 			self.invalid.push(validationResult);
 			if(self.passed) {
 				self.passed = false;

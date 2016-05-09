@@ -82,26 +82,22 @@ FieldList.prototype.register = function (validator, message, validatorFunc, opti
   if (validator instanceof Validator) {
     newValidator = validator;
   }
-  // else if (arguments.length === 2 typeof validator === 'string') {
   else if (typeof validator === 'string') {
     if(typeof message === 'function') {
       newValidator = new Validator(validator, message);
     } else if(typeof message === 'string') {
       newValidator = new Validator(validator, message, validatorFunc);
     }
-    // if(arguments.length === 2)
-    // newValidator = new Validator(validator, validatorFunc);
   }
 
-  if(options && options.modelAccess && newValidator) {
-    newValidator._fullModelAccess = true;
+  if(options && newValidator) {
+    if(options.async) {
+      newValidator.async = true;
+    }
+    if(options.modelAccess) {
+      newValidator._fullModelAccess = true;
+    }
   }
-  // else if (typeof validator === 'function' && validator.name !== undefined) {
-  //   newValidator = new Validator(validator.name, validator);
-  //   if(arguments.length === 2 && typeof message === 'string') {
-  //    newValidator.setErrorMessage(message);
-  //   }
-  // }
 
   if(newValidator) {
     this._validatorStore[newValidator.name] = newValidator;
@@ -109,28 +105,28 @@ FieldList.prototype.register = function (validator, message, validatorFunc, opti
   }
 }
 
-FieldList.prototype.mixValidators = function(name, message, validatorFunc, options) {
-  var validationFunctions = this.getValidatorFunctions();
-  var newValidator;
-  if(typeof message === 'function') {
-    newValidator = new Validator(name, message.bind(this, validationFunctions));
-  } else if(typeof message === 'string') {
-    newValidator = new Validator(name, message, validatorFunc.bind(this, validationFunctions))
-  }
+// FieldList.prototype.mixValidators = function(name, message, validatorFunc, options) {
+//   var validationFunctions = this.getValidatorFunctions();
+//   var newValidator;
+//   if(typeof message === 'function') {
+//     newValidator = new Validator(name, message.bind(this, validationFunctions));
+//   } else if(typeof message === 'string') {
+//     newValidator = new Validator(name, message, validatorFunc.bind(this, validationFunctions))
+//   }
 
-  if(options && newValidator) {
-    if(options.modelAccess) {
-      newValidator._fullModelAccess = true;
-    }
-    if(options.async) {
-      newValidator.async = true;
-    }
-  }
+//   if(options && newValidator) {
+//     if(options.modelAccess) {
+//       newValidator._fullModelAccess = true;
+//     }
+//     if(options.async) {
+//       newValidator.async = true;
+//     }
+//   }
 
-  if(newValidator) {
-    return this.register(newValidator)
-  }
-}
+//   if(newValidator) {
+//     return this.register(newValidator)
+//   }
+// }
 
 FieldList.prototype.getValidatorFunctions = function() {
   var validationFuncObj = {};
