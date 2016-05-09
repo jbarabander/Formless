@@ -34,8 +34,6 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj, 
 		return Promise.all(newValidatorArr)
 		.then(function(resultsArr) {
 			self._putResultsInRightBuckets(resultsArr, validatorArr);
-		})
-		.then(function() {
 			return self;
 		})
 	}
