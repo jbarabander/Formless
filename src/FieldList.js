@@ -24,7 +24,7 @@ FieldList.prototype.setDefaultFields = function(fields) {
 }
 
 
-FieldList.prototype.compare = function (model, fields) {
+FieldList.prototype.compare = function (model, fields, sync) {
   var keys = Object.keys(model);
   var validationResult = {};
   var self = this;
@@ -44,9 +44,23 @@ FieldList.prototype.compare = function (model, fields) {
       validatorsAndParams = self._parseValidatorObj(currentField);
     }
     var validationResponse = new ValidationResponse();
-    validationResult[currentKey] = validationResponse.testValidators(model[currentKey], validatorsAndParams, model);
+    var testedValidators;
+    if(sync) {
+      testedValidators = validationResponse.testValidators(model[currentKey], validatorsAndParams, model, true);
+    } else {
+      testedValidators = validationResponse.testValidators(model[currentKey], validatorsAndParams, model);
+    }
+    validationResult[currentKey] = testedValidators;
   }
   return validationResult;
+}
+
+FieldList.prototype.compareAsync = function (model, fields) {
+  return Promise.props(this.compare(model, fields));
+}
+
+FieldList.prototype.compareSyncOnly = function(model, fields) {
+  return this.compare(model, fields);
 }
 
 FieldList.prototype._parseValidatorObj = function (validationObj) {
@@ -105,29 +119,6 @@ FieldList.prototype.register = function (validator, message, validatorFunc, opti
     return newValidator;
   }
 }
-
-// FieldList.prototype.mixValidators = function(name, message, validatorFunc, options) {
-//   var validationFunctions = this.getValidatorFunctions();
-//   var newValidator;
-//   if(typeof message === 'function') {
-//     newValidator = new Validator(name, message.bind(this, validationFunctions));
-//   } else if(typeof message === 'string') {
-//     newValidator = new Validator(name, message, validatorFunc.bind(this, validationFunctions))
-//   }
-
-//   if(options && newValidator) {
-//     if(options.modelAccess) {
-//       newValidator._fullModelAccess = true;
-//     }
-//     if(options.async) {
-//       newValidator.async = true;
-//     }
-//   }
-
-//   if(newValidator) {
-//     return this.register(newValidator)
-//   }
-// }
 
 FieldList.prototype.getValidatorFunctions = function() {
   var validationFuncObj = {};

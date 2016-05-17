@@ -32,7 +32,7 @@ function checkTypeIsCorrect(arg, type) {
   }
 }
 
-function assignParams(element, value) {
+function assignParams(element, value, model) {
   var params = element.params ? element.params : [];
     if(element.param !== undefined && element.param !== null) {
       params.unshift(element.param);

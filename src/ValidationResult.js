@@ -7,7 +7,7 @@ function ValidationResult(value, validationParamsObj) {
 	// this.passed = true;
 }
 
-ValidationResult.prototype.testValidators = function(value, validatorParamsObj, model) {
+ValidationResult.prototype.testValidators = function(value, validatorParamsObj, model, syncOnly) {
 	var self = this;
 	var async = false;
 
@@ -21,13 +21,14 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj, 
 	var newValidatorArr = [];
 	var validatorArr = Array.isArray(validatorParamsObj) ? validatorParamsObj : [validatorParamsObj];
 	validatorArr.forEach(function(element) {
-		var params = assignParams(element, value);
-
-		if(!async && element.validator.async) {
+		if(!async && element.validator.async && !syncOnly) {
 			async = true;
 		}
 
-		newValidatorArr.push(element.validator.validatePropToObj.apply(element.validator, params));
+		if(!syncOnly || syncOnly && !element.validator.async) {
+			var params = assignParams(element, value, model);
+			newValidatorArr.push(element.validator.validatePropToObj.apply(element.validator, params));
+		}
   	})
 
 	if(async) {
