@@ -27,7 +27,7 @@ describe('FieldList', function() {
 			arrTest: [{validator: 'lengthValidator', params: [2, 5]}, {validator: 'formlessRequired'}],
 			objTest: [{validator: 'formlessRequired'}, {validator: 'formlessStrictEquals', param: {}, message: 'This is not the correct object'}]
 		}
-		var validationResult = modelComparer.compare(model, comparisonFields);
+		var validationResult = modelComparer.compareSyncOnly(model, comparisonFields);
 		expect(validationResult.strTest.passed).to.be.true;
 		expect(validationResult.arrTest.passed).to.be.true;
 		expect(validationResult.objTest.passed).to.be.false;
