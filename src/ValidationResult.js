@@ -1,11 +1,15 @@
+var Promise = require('bluebird');
+var assignParams = require('./utilities').assignParams;
+
 function ValidationResult(value, validationParamsObj) {
 	this.valid = [];
 	this.invalid = [];
 	// this.passed = true;
 }
 
-ValidationResult.prototype.testValidators = function(value, validatorParamsObj, model) {
+ValidationResult.prototype.testValidators = function(value, validatorParamsObj, model, syncOnly) {
 	var self = this;
+	var async = false;
 
 	self.passed = true;
 	self.value = value;
@@ -14,25 +18,45 @@ ValidationResult.prototype.testValidators = function(value, validatorParamsObj, 
 		return;
 	}
 
+	var newValidatorArr = [];
 	var validatorArr = Array.isArray(validatorParamsObj) ? validatorParamsObj : [validatorParamsObj];
 	validatorArr.forEach(function(element) {
-		var params = element.params ? element.params : [];
-		if(element.param !== undefined && element.param !== null) {
-			params.unshift(element.param);
-		}
-		if(element.validator.getModelAccessStatus()) {
-			params.unshift(model);
+		if(!async && element.validator.async && !syncOnly) {
+			async = true;
 		}
 
-    	if(!element.validator.validateProp(value, params)) {
-      		self.invalid.push(element.validator.validatePropToObj(value, params, element.message));
-      		if(self.passed) self.passed = false;
-    	} else {
-      		self.valid.push(element.validator.validatePropToObj(value, params));
-    	}
+		if(!syncOnly || syncOnly && !element.validator.async) {
+			var params = assignParams(element, value, model);
+			newValidatorArr.push(element.validator.validatePropToObj.apply(element.validator, params));
+		}
   	})
 
-  	return this;
+	if(async) {
+		return Promise.all(newValidatorArr)
+		.then(function(resultsArr) {
+			self._putResultsInRightBuckets(resultsArr, validatorArr);
+			return self;
+		})
+	}
+	self._putResultsInRightBuckets(newValidatorArr, validatorArr);
+	return self;
+}
+
+ValidationResult.prototype._putResultsInRightBuckets = function(arr, oldValidatorArr) {
+	var self = this;
+	arr.forEach(function(validationResult, i) {
+		if(validationResult.passed !== true) {
+			if(oldValidatorArr && typeof oldValidatorArr[i].message === 'string') {
+				validationResult.message = oldValidatorArr[i].message;
+			}
+			self.invalid.push(validationResult);
+			if(self.passed) {
+				self.passed = false;
+			}
+		} else {
+			self.valid.push(validationResult);
+		}
+	})
 }
 
 ValidationResult.prototype.getFirstFailed = function() {

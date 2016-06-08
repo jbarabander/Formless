@@ -27,13 +27,26 @@ function assignDefaultValidators(validatorFuncCollection) {
 
 function checkTypeIsCorrect(arg, type) {
   var argType = typeof arg;
-  if(argType !== 'type') {
+  if(argType !== type) {
     throw new Error('Expected ' + type + ' but got ' + argType);
   }
+}
+
+function assignParams(element, value, model) {
+  var params = element.params ? element.params : [];
+    if(element.param !== undefined && element.param !== null) {
+      params.unshift(element.param);
+    }
+    if(element.modelAccess) {
+      params.unshift(model);
+    }
+    params.unshift(value);
+    return params;
 }
 
 module.exports = {
   assignDefaultValidators: assignDefaultValidators,
   isValidMdy: isValidMdy,
-  checkTypeIsCorrect: checkTypeIsCorrect
+  checkTypeIsCorrect: checkTypeIsCorrect,
+  assignParams: assignParams
 };
