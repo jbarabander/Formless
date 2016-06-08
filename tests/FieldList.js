@@ -20,6 +20,14 @@ describe('FieldList', function() {
 		return minLength < prop.length && prop.length < maxLength;
 	})
 
+	modelComparer.register('asyncValidator', function(done) {
+		return function(test, fun) {
+			setTimeout(function() {
+				done(true);
+			}, 1000);
+		}
+	})
+
 	it('should validate correctly with custom created validators', function(done) {
 		var comparisonFields = {
 			strTest: [{validator: 'lengthValidator', params: [1, 8]}, {validator: 'testValidator', param: 'foo'}],
@@ -33,4 +41,15 @@ describe('FieldList', function() {
 		expect(validationResult.objTest.passed).to.be.false;
 		done();
 	});
+
+	it('should validate correctly with async validators', function(done) {
+		var comparisonFields = {
+			strTest: ['asyncValidator']
+		};
+		modelComparer.compareAsync(model, comparisonFields)
+		.then(function(result) {
+			expect(result.strTest.passed).to.be.true;
+			done();
+		})
+	})
 })
