@@ -3,7 +3,6 @@ var Promise = require('bluebird');
 
 function Validator(name, message, validationFunc) {
   this.name = name;
-  this._fullModelAccess = false;
   this.async = false;
   if(typeof message === 'function') {
     this.validationFunc = message;
@@ -11,31 +10,6 @@ function Validator(name, message, validationFunc) {
     this.invalidMessage = message;
     this.validationFunc = validationFunc;
   }
-}
-
-Validator.prototype._enableModelAccessOnly = function() {
-  this._fullModelAccess = true;
-}
-
-Validator.prototype._disableModelAccessOnly = function() {
-  this._fullModelAccess = false;
-}
-
-Validator.prototype.enableModelAccess = function(func) {
-  checkTypeIsCorrect(func, 'function');
-  this._fullModelAccess = true;
-  this.validationFunc = func;
-}
-
-Validator.prototype.disableModelAccess = function(func) {
-  checkTypeIsCorrect(func, 'function');
-  this._fullModelAccess = false;
-  this.validationFunc = func;
-}
-
-
-Validator.prototype.getModelAccessStatus = function() {
-  return this._fullModelAccess;
 }
 
 Validator.prototype.setInvalidMessage = function (invalidMessage) {

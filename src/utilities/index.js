@@ -37,7 +37,7 @@ function assignParams(element, value, model) {
     if(element.param !== undefined && element.param !== null) {
       params.unshift(element.param);
     }
-    if(element.validator.getModelAccessStatus()) {
+    if(element.modelAccess) {
       params.unshift(model);
     }
     params.unshift(value);

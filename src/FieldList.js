@@ -89,6 +89,10 @@ FieldList.prototype._parseValidatorObj = function (validationObj) {
     newObj.params = validationObj.params;
   }
 
+  if(validationObj.modelAccess) {
+    newObj.modelAccess = true;
+  }
+
   return newObj;
 }
 
