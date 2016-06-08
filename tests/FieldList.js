@@ -28,6 +28,10 @@ describe('FieldList', function() {
 		}
 	})
 
+	modelComparer.register('modelAccessValidator', function(value, model, currentStr) {
+		return value === currentStr && model.arrTest[1] === 'bar';
+	})
+
 	it('should validate correctly with custom created validators', function(done) {
 		var comparisonFields = {
 			strTest: [{validator: 'lengthValidator', params: [1, 8]}, {validator: 'testValidator', param: 'foo'}],
@@ -51,5 +55,14 @@ describe('FieldList', function() {
 			expect(result.strTest.passed).to.be.true;
 			done();
 		})
+	})
+
+	it('should validate correclty when it requires model access', function(done) {
+		var comparisonFields = {
+			strTest: [{validator: 'modelAccessValidator', params: ['foo'], modelAccess: true}]
+		}
+		var validationResult = modelComparer.compareSyncOnly(model, comparisonFields);
+		expect(validationResult.strTest.passed).to.be.true;
+		done()
 	})
 })
