@@ -16,7 +16,7 @@ describe('FieldList', function() {
 	modelComparer.register('lengthValidator', function(prop, minLength, maxLength) {
 		if(prop.length === undefined) {
 			return true;
-		} 
+		}
 		return minLength < prop.length && prop.length < maxLength;
 	})
 
@@ -63,6 +63,6 @@ describe('FieldList', function() {
 		}
 		var validationResult = modelComparer.compareSyncOnly(model, comparisonFields);
 		expect(validationResult.strTest.passed).to.be.true;
-		done()
+		done();
 	})
 })

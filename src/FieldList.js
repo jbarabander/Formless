@@ -16,13 +16,14 @@ function assignDefaultValidators(validatorFuncCollection) {
 function FieldList(obj, options) {
   this.fields = obj || {};
   // this._validatorStore = {};
-  this._validatorStore = assignDefaultValidators(builtInValidation);
+  this._validatorStore = {};
 }
 
 FieldList.prototype.setDefaultFields = function(fields) {
   this.fields = fields;
 }
 
+FieldList.prototype._defaultValidators = assignDefaultValidators(builtInValidation);
 
 FieldList.prototype.compare = function (model, fields, sync) {
   var keys = Object.keys(model);
@@ -68,11 +69,11 @@ FieldList.prototype._parseValidatorObj = function (validationObj) {
   var newValidator;
   var newObj;
   if(typeof validationObj === 'string') {
-    newValidator = this._validatorStore[validationObj];
+    newValidator = this._validatorStore[validationObj] || this._defaultValidators[validationObj];
   } else if(validationObj.validator instanceof Validator || typeof validationObj.validator === 'function') {
     newValidator = validationObj.validator;
   } else if(typeof validationObj.validator === 'string') {
-    newValidator = this._validatorStore[validationObj.validator];
+    newValidator = this._validatorStore[validationObj.validator] || this._defaultValidators[validationObj.validator];
   } else {
     throw new Error('validator must be a Validator, string, or function');
   }
