@@ -14,10 +14,17 @@ bower install Formless --save
 ```
 
 ##Usage
+
+###Basic
 Using Formless is simple.  If using webpack/browserify simply require it in like so:
 ```js
 var Formless = require('Formless');
 ```
+otherwise you can include it as a script on your html
+```html
+<script src="/path/to/formless/Formless.js">
+```
+
 then you can simply declare a new instance and start to register validators onto it.
 ```js
 var validationService = new Formless();
@@ -29,7 +36,11 @@ validationService.register('required', function (value) {
 with those validators registered you can use the compareAsync or compareSyncOnly methods (depending on the nature of your validators) to validate your model.
 
 ```js
-var model = {foo: 'bar', emptyVal: ''};
+var model = {
+  foo: 'bar', 
+  emptyVal: ''
+};
+
 var validationSchema = {
   foo: 'required', 
   emptyVal: 'required'
