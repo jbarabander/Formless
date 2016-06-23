@@ -22,7 +22,7 @@ var Formless = require('Formless');
 ```
 otherwise you can include it as a script on your html
 ```html
-<script src="/path/to/formless/Formless.js">
+<script src="/path/to/formless/Formless.js"></script>
 ```
 
 then you can simply declare a new instance and start to register validators onto it.
