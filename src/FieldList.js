@@ -60,7 +60,7 @@ FieldList.prototype.compareAsync = function (model, fields) {
 }
 
 FieldList.prototype.compareSyncOnly = function(model, fields) {
-  return this.compare(model, fields);
+  return this.compare(model, fields, true);
 }
 
 FieldList.prototype._parseValidatorObj = function (validationObj) {
