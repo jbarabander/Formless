@@ -26,4 +26,17 @@ validationService.register('required', function (value) {
 })
 ```
 
+with those validators registered you can use the compareAsync or compareSyncOnly methods (depending on the nature of your validators) to validate your model.
+
+```js
+var model = {foo: 'bar', emptyVal: ''};
+var validationSchema = {
+  foo: 'required', 
+  emptyVal: 'required'
+};
+
+var validationResults = validationService.compareSyncOnly(model, validationSchema);
+//validationResults is equal to {foo: {passed: true}, emptyVal: {passed: false}}
+```
+
 
