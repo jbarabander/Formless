@@ -47,7 +47,29 @@ var validationSchema = {
 };
 
 var validationResults = validationService.compareSyncOnly(model, validationSchema);
-//validationResults is equal to {foo: {passed: true}, emptyVal: {passed: false}}
+// validationResults is equal to {foo: {passed: true}, emptyVal: {passed: false}}
 ```
 
+###Validation with parameters
+Well that's all fine and dandy but maybe you want to register one validator and then use parameters to determine when a property should pass validation and when it should not.
+
+That's no problem at all.  First register a new validator that takes in the value as its first parameter and then as many additional parameters that you would like to pass to it from the schema afterwards.
+```js
+validationService.register('minLength', function (value, minChars) {
+  if (typeof value === 'string' || Array.isArray(value) {
+    return value.length >= minChars
+  }
+  return true
+}
+```
+and then in your schema instead of simply passing in the string name for the validator pass in an object with the validator name instead under the validator property and then an array of the parameters you want to pass in the params property of that object.
+```js
+var model = {foo: 'bar'}
+var validationSchema = {
+  foo: {validator: 'minLength', params: [4]}
+}
+
+var validationResults = validationService.compareSyncOnly(model, validationSchema)
+// validationResults is equal to: {foo: {passed: false}}
+```
 
