@@ -119,6 +119,11 @@ FieldList.prototype.register = function (validator, message, validatorFunc, opti
   }
 
   if(newValidator) {
+    try {
+      if (typeof newValidator.validationFunc(Function.prototype) === 'function') {
+        newValidator.async = true;
+      }
+    } catch (e) {}
     this._validatorStore[newValidator.name] = newValidator;
     return newValidator;
   }
