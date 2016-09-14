@@ -23,8 +23,8 @@ describe('FieldList', function() {
 	modelComparer.register('asyncValidator', function(done) {
 		return function(test, fun) {
 			setTimeout(function() {
-				done(true);
-			}, 1000);
+				done(null, true);
+			}, 500);
 		}
 	})
 
@@ -57,7 +57,7 @@ describe('FieldList', function() {
 		})
 	})
 
-	it('should validate correclty when it requires model access', function(done) {
+	it('should validate correctly when it requires model access', function(done) {
 		var comparisonFields = {
 			strTest: [{validator: 'modelAccessValidator', params: ['foo'], modelAccess: true}]
 		}

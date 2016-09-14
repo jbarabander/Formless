@@ -4,6 +4,23 @@ var Promise = require('bluebird');
 function Validator(name, message, validationFunc) {
   this.name = name;
   this.async = false;
+  var self = this;
+  Object.defineProperty(this, 'validationFunc', {
+    get: function () {
+      return this.__validationFunc;
+    },
+    set: function (value) {
+      if (typeof value !== 'function') {
+        return;
+      }
+      self.__validationFunc = value;
+      try {
+        if (typeof value(Function.prototype) === 'function') {
+          self.async = true;
+        }
+      } catch (e) {}
+    }
+  })
   if(typeof message === 'function') {
     this.validationFunc = message;
   } else if(typeof message === 'string') {
