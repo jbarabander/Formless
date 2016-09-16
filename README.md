@@ -29,7 +29,7 @@ then you can simply declare a new instance and start to register validators onto
 ```js
 var validationService = new Formless();
 validationService.register('required', function (value) {
-  return value !== undefined && value !== '' && value !== null && !isNaN(value);
+  return value !== undefined && value !== '' && value !== null && (typeof value !== 'number' || !isNaN(value));
 })
 ```
 
@@ -56,7 +56,7 @@ Well that's all fine and dandy but maybe you want to register one validator and 
 That's no problem at all.  First register a new validator that takes in the value as its first parameter and then as many additional parameters that you would like to pass to it from the schema afterwards.
 ```js
 validationService.register('minLength', function (value, minChars) {
-  if (typeof value === 'string' || Array.isArray(value) {
+  if (typeof value === 'string' || Array.isArray(value)) {
     return value.length >= minChars
   }
   return true
