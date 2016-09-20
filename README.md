@@ -74,7 +74,7 @@ var validationResults = validationService.compareSyncOnly(model, validationSchem
 ```
 
 ###Asynchronous Validation
-Maybe you want to perform some asynchronous validation instead. This is easy with Formless as well.  In order to register an asynchronous validator rather than registering your validation function directly instead simply register a function which takes a callback as its only argument and returns the validator function you want inside of it - calling that callback when you are finished with the validation.  For example if you were using jQuery to make an ajax call you can set up an asynchronous validator as follows:
+Maybe you want to perform some asynchronous validation instead. This is easy with Formless as well.  Rather than registering your validation function directly instead simply register a function which takes a callback as its only argument and returns the validator function you want inside of it - calling that callback when you are finished with the validation.  For example if you were using jQuery to make an ajax call you can set up an asynchronous validator as follows:
 ```js
 validationService.register('asyncValidator', function (done) {
   return function (value) {
