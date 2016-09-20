@@ -97,10 +97,10 @@ var asyncValidationSchema = {
   asyncValueToCheck: 'asyncValidator'
 };
 validationService.compareAsync(model, asyncValidationSchema)
-.then(function (result) {
-  // depending on the results of your asynchronous function: results will either be 
-  // {foo: {passed: true}} 
-  // or
-  // {foo: {passed: false}}
-})
+  .then(function (result) {
+    // depending on the results of your asynchronous function: results will either be 
+    // {foo: {passed: true}} 
+    // or
+    // {foo: {passed: false}}
+  });
 ```
