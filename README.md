@@ -92,16 +92,16 @@ validationService.register('asyncValidator', function (done) {
 ```
 Then rather than compareSync use compareAsync instead when testing your validation.  Keep in mind that this method will return a promise resolving to the results of the validation.
 ```js
-var model = {asyncValueToCheck: 'This is asynchronous'};
+var model = {valueToCheckForAsync: 'This is asynchronous'};
 var asyncValidationSchema = {
-  asyncValueToCheck: 'asyncValidator'
+  valueToCheckForAsync: 'asyncValidator'
 };
 validationService
   .compareAsync(model, asyncValidationSchema)
   .then(function (result) {
     // depending on the results of your asynchronous function: result will either be 
-    // {foo: {passed: true}} 
+    // {valueToCheckForAsync: {passed: true}} 
     // or
-    // {foo: {passed: false}}
+    // {valueToCheckForAsync: {passed: false}}
   });
 ```
