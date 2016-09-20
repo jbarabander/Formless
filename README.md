@@ -94,7 +94,7 @@ Then rather than compareSync use compareAsync instead when testing your validati
 ```js
 var model = {asyncValueToCheck: 'This is asynchronous'};
 var asyncValidationSchema = {
-  foo: 'bar'
+  asyncValueToCheck: 'asyncValidator'
 };
 validationService.compareAsync(model, asyncValidationSchema)
 .then(function (result) {
