@@ -57,19 +57,50 @@ That's no problem at all.  First register a new validator that takes in the valu
 ```js
 validationService.register('minLength', function (value, minChars) {
   if (typeof value === 'string' || Array.isArray(value)) {
-    return value.length >= minChars
+    return value.length >= minChars;
   }
-  return true
-}
+  return true;
+});
 ```
 and then in your schema instead of simply passing in the string name for the validator pass in an object with the validator name instead under the validator property and then an array of the parameters you want to pass in the params property of that object.
 ```js
-var model = {foo: 'bar'}
+var model = {foo: 'bar'};
 var validationSchema = {
   foo: {validator: 'minLength', params: [4]}
-}
+};
 
-var validationResults = validationService.compareSyncOnly(model, validationSchema)
+var validationResults = validationService.compareSyncOnly(model, validationSchema);
 // validationResults is equal to: {foo: {passed: false}}
 ```
 
+###Asynchronous Validation
+Maybe you want to perform some asynchronous validation instead. This is easy with Formless as well.  In order to register an asynchronous validator rather than registering your validation function directly instead simply register a function which takes a callback as its only argument and returns the validator function you want inside of it - calling that callback when you are finished with the validation.  For example if you were using jQuery to make an ajax call you can set up an asynchronous validator as follows:
+```js
+validationService.register('asyncValidator', function (done) {
+  return function (value) {
+    $.ajax('localhost:3000/test/url', {
+      method: 'GET',
+      success: function (data) {
+        done(null, data === value);
+      },
+      error: function (err) {
+        done(err);
+      }
+    });
+  }
+});
+```
+Then rather than compareSync use compareAsync instead when testing your validation.  Keep in mind that this method will return a promise resolving to the results of the validation.
+```js
+var model = {asyncValueToCheck: 'This is asynchronous'};
+var asyncValidationSchema = {
+  foo: 'bar'
+};
+validationService.compareAsync(model, asyncValidationSchema)
+.then(function (result) {
+  // depending on the results of your asynchronous function: results will either be 
+  // {foo: {passed: true}} 
+  // or
+  // {foo: {passed: false}}
+})
+```
