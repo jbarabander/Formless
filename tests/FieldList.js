@@ -6,7 +6,7 @@ describe('FieldList', function() {
 		strTest: 'foo',
 		numTest: 2,
 		arrTest: [1, 'bar', [], {}],
-		objTest: {}
+		objTest: {},
 	}
 	var modelComparer = new FieldList();
 	modelComparer.register('testValidator', function(prop, value) {
@@ -27,6 +27,21 @@ describe('FieldList', function() {
 			}, 500);
 		}
 	})
+	var validationMessage = 'This string is too short';
+	modelComparer.register('messageValidator', validationMessage, function(prop, length) {
+			return prop.length >= length;
+	});
+	var dynamicArrayMessage = 'This element is an array';
+	var dynamicNumberMessage = 'This element is a number';
+	modelComparer.register('dynamicMessageValidator', function (prop) {
+		if (Array.isArray(prop)) {
+			return dynamicArrayMessage;
+		}
+		if (typeof prop === 'number') {
+			return dynamicNumberMessage;
+		}
+		return true;
+	});
 
 	modelComparer.register('modelAccessValidator', function(value, model, currentStr) {
 		return value === currentStr && model.arrTest[1] === 'bar';
@@ -64,5 +79,26 @@ describe('FieldList', function() {
 		var validationResult = modelComparer.compareSyncOnly(model, comparisonFields);
 		expect(validationResult.strTest.passed).to.be.true;
 		done()
+	})
+	it('should display message when defined and validation fails', function(done) {
+		var comparisonFields = {
+			strTest: [{validator: 'messageValidator', params: [4]}]
+		}
+		var validationResult = modelComparer.compareSyncOnly(model, comparisonFields);
+		expect(validationResult.strTest.passed).to.be.false;
+		expect(validationResult.strTest.invalid[0].message).to.equal(validationMessage);
+		done();
+	})
+	it('should fail validation and give output of validator as message when string is returned', function (done) {
+		var comparisonFields = {
+			numTest: 'dynamicMessageValidator',
+			arrTest: 'dynamicMessageValidator',
+		}
+		var validationResult = modelComparer.compareSyncOnly(model, comparisonFields);
+		expect(validationResult.numTest.passed).to.be.false;
+		expect(validationResult.numTest.invalid[0].message).to.equal(dynamicNumberMessage);
+		expect(validationResult.arrTest.passed).to.be.false;
+		expect(validationResult.arrTest.invalid[0].message).to.equal(dynamicArrayMessage);
+		done();
 	})
 })
