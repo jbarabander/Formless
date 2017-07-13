@@ -52,12 +52,8 @@ Validator.prototype.validateProp = function() {
 Validator.prototype.validatePropToObj = function() {
   var validated;
   if(!this.async) {
-    validated = !!this.validationFunc.apply(this, arguments);
-    var obj = {name: this.name, passed: validated};
-    if(!validated && this.invalidMessage) {
-      obj.message = this.invalidMessage;
-    }
-    return obj;
+    validationResult = this.validationFunc.apply(this, arguments);
+    return this.createValidatorResultObj(validationResult);
   }
   return this.validatePropToObjAsync.apply(this, arguments);
 }
@@ -82,14 +78,22 @@ Validator.prototype.validatePropToObjAsync = function() {
   return new Promise(function(resolve, reject) {
     var unwrappedValidationFunc = self.validationFunc(function(err, result) {
       if(err) return reject(err);
-      var obj = {name: self.name, passed: !!result};
-      if(!result && self.invalidMessage) {
-        obj.message = this.invalidMessage;
-      }
-      return resolve(obj);
+      var validationResultObj = self.createValidatorResultObj(result);
+      return resolve(validationResultObj);
     });
     return unwrappedValidationFunc.apply(self, newArgs);
   });
+}
+
+Validator.prototype.createValidatorResultObj = function(result) {
+  var obj = {name: this.name};
+  var resultIsString = typeof result === 'string';
+  obj.passed = resultIsString ? false : !!result;
+  var errorMessage = resultIsString ? result : this.invalidMessage;
+  if (!obj.passed && errorMessage) {
+    obj.message = errorMessage;
+  }
+  return obj;
 }
 
 module.exports = Validator;
